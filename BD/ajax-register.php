@@ -2,7 +2,7 @@
 session_start();
 
 error_reporting(E_ALL);
-ini_set('display_errors', 0); // No mostrar errores en producción
+ini_set('display_errors', 0);
 ini_set('log_errors', 1);
 
 require_once 'config.php';
@@ -23,7 +23,6 @@ $name = trim($_POST['nombre_usuario'] ?? '');
 $email = trim($_POST['correo_electronico'] ?? '');
 $password = $_POST['contrasena'] ?? '';
 
-// Validaciones
 if (empty($email) || empty($password)) {
     echo json_encode(['success' => false, 'error' => 'Email y contraseña son obligatorios']);
     exit();
@@ -39,12 +38,10 @@ if (strlen($password) < 4) {
     exit();
 }
 
-// Usar email como nombre de usuario si no se proporciona nombre
 if (empty($name)) {
     $name = explode('@', $email)[0];
 }
 
-// Verificar si el usuario ya existe
 $stmt = $conexion->prepare("SELECT id FROM usuarios WHERE correo_electronico = ?");
 if (!$stmt) {
     echo json_encode(['success' => false, 'error' => 'Error al preparar consulta: ' . $conexion->error]);
@@ -62,7 +59,6 @@ if ($result->num_rows > 0) {
 }
 $stmt->close();
 
-// Registrar el usuario
 $hash_password = password_hash($password, PASSWORD_BCRYPT);
 $stmt = $conexion->prepare("INSERT INTO usuarios (nombre_usuario, correo_electronico, contrasena) VALUES (?, ?, ?)");
 if (!$stmt) {
@@ -73,7 +69,6 @@ if (!$stmt) {
 $stmt->bind_param("sss", $name, $email, $hash_password);
 
 if ($stmt->execute()) {
-    // Iniciar sesión automáticamente
     $_SESSION['usuario_id'] = $stmt->insert_id;
     $_SESSION['nombre_usuario'] = $name;
     echo json_encode(['success' => true, 'mensaje' => 'Registro exitoso']);

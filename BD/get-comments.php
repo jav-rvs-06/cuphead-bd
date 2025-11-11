@@ -11,7 +11,6 @@ $response = [
 $pagina_filtro = isset($_GET['pagina']) && !empty($_GET['pagina']) ? $_GET['pagina'] : null;
 
 if ($pagina_filtro) {
-    // Filtrar por página específica
     $stmt = $conexion->prepare("
         SELECT c.titulo, c.contenido, c.fecha_comentario, c.pagina, u.nombre_usuario 
         FROM comentarios c 
@@ -22,7 +21,6 @@ if ($pagina_filtro) {
     ");
     $stmt->bind_param("s", $pagina_filtro);
 } else {
-    // Obtener todos los comentarios recientes
     $stmt = $conexion->prepare("
         SELECT c.titulo, c.contenido, c.fecha_comentario, c.pagina, u.nombre_usuario 
         FROM comentarios c 

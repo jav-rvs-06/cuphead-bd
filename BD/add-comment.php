@@ -8,13 +8,11 @@ if (!isset($_SESSION['usuario_id'])) {
     exit();
 }
 
-// Recibir datos del formulario
 $usuario_id = $_SESSION['usuario_id'];
 $pagina = trim($_POST['pagina'] ?? '');
 $titulo = trim($_POST['titulo'] ?? '');
 $contenido = trim($_POST['contenido'] ?? '');
 
-// Validar datos
 if (empty($pagina) || empty($titulo) || empty($contenido)) {
     echo json_encode(['success' => false, 'error' => 'Todos los campos son obligatorios']);
     exit();
@@ -30,7 +28,6 @@ if (strlen($contenido) < 10) {
     exit();
 }
 
-// Guardar el comentario en la base de datos
 $stmt = $conexion->prepare("INSERT INTO comentarios (usuario_id, pagina, titulo, contenido) VALUES (?, ?, ?, ?)");
 $stmt->bind_param("isss", $usuario_id, $pagina, $titulo, $contenido);
 

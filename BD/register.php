@@ -10,7 +10,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $contrasena = $_POST['contrasena'] ?? '';
     $confirmar_contrasena = $_POST['confirmar_contrasena'] ?? '';
 
-    // Validaciones
     if (empty($nombre_usuario) || empty($correo_electronico) || empty($contrasena) || empty($confirmar_contrasena)) {
         $error = 'Todos los campos son obligatorios.';
     } elseif (strlen($nombre_usuario) < 3) {
@@ -22,7 +21,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } elseif (strlen($contrasena) < 6) {
         $error = 'La contraseña debe tener al menos 6 caracteres.';
     } else {
-        // Verificar si el usuario ya existe
         $stmt = $conexion->prepare("SELECT id FROM usuarios WHERE nombre_usuario = ? OR correo_electronico = ?");
         $stmt->bind_param("ss", $nombre_usuario, $correo_electronico);
         $stmt->execute();
@@ -31,7 +29,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($result->num_rows > 0) {
             $error = 'El nombre de usuario o correo electrónico ya están registrados.';
         } else {
-            // Registrar el usuario
             $hash_contrasena = password_hash($contrasena, PASSWORD_BCRYPT);
             $stmt = $conexion->prepare("INSERT INTO usuarios (nombre_usuario, correo_electronico, contrasena) VALUES (?, ?, ?)");
             $stmt->bind_param("sss", $nombre_usuario, $correo_electronico, $hash_contrasena);

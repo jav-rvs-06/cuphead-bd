@@ -90,6 +90,208 @@
     
     .loading { text-align: center; padding: 20px; color: #666; }
     
+    /* Agregando estilos para sistema de tabs */
+    .tabs-container {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+      border-bottom: 2px solid #eee;
+      padding-bottom: 10px;
+    }
+    
+    .tab-btn {
+      background: #f5f5f5;
+      color: #8B4513;
+      border: 2px solid #8B4513;
+      padding: 10px 20px;
+      border-radius: 15px 15px 0 0;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s;
+      font-size: 14px;
+    }
+    
+    .tab-btn.active {
+      background: linear-gradient(45deg, #FFD700, #FFA500);
+      border-bottom-color: transparent;
+      transform: translateY(2px);
+    }
+    
+    .tab-btn:hover:not(.active) {
+      background: #fff;
+    }
+    
+    .tab-content {
+      display: none;
+    }
+    
+    .tab-content.active {
+      display: block;
+    }
+    
+    /* Estilos para formulario de récords */
+    .record-card {
+      background: #f9f9f9;
+      border: 2px solid #eee;
+      border-radius: 12px;
+      padding: 15px;
+      margin-bottom: 15px;
+      display: flex;
+      gap: 15px;
+    }
+    
+    .record-image {
+      width: 150px;
+      height: 150px;
+      object-fit: cover;
+      border-radius: 8px;
+      border: 2px solid #8B4513;
+      cursor: pointer;
+    }
+    
+    .record-info {
+      flex: 1;
+    }
+    
+    .record-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: start;
+      margin-bottom: 10px;
+    }
+    
+    .record-user {
+      font-weight: bold;
+      color: #8B4513;
+      font-size: 16px;
+    }
+    
+    .record-badge {
+      padding: 4px 12px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: bold;
+    }
+    
+    .badge-aprobado {
+      background: #4caf50;
+      color: white;
+    }
+    
+    .badge-pendiente {
+      background: #ff9800;
+      color: white;
+    }
+    
+    .badge-rechazado {
+      background: #f44336;
+      color: white;
+    }
+    
+    .record-details {
+      font-size: 14px;
+      color: #666;
+      margin-top: 8px;
+    }
+    
+    .record-value {
+      font-size: 24px;
+      font-weight: bold;
+      color: #FFD700;
+      text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+      margin: 10px 0;
+    }
+    
+    .verify-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 10px;
+    }
+    
+    .btn-verify {
+      padding: 8px 16px;
+      border-radius: 8px;
+      border: none;
+      font-weight: bold;
+      cursor: pointer;
+      transition: transform 0.15s;
+      font-size: 13px;
+    }
+    
+    .btn-approve {
+      background: #4caf50;
+      color: white;
+    }
+    
+    .btn-reject {
+      background: #f44336;
+      color: white;
+    }
+    
+    .btn-verify:hover {
+      transform: translateY(-2px);
+    }
+    
+    /* Modal para ver imagen completa */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.9);
+      justify-content: center;
+      align-items: center;
+    }
+    
+    .modal.active {
+      display: flex;
+    }
+    
+    .modal-content {
+      max-width: 90%;
+      max-height: 90%;
+      object-fit: contain;
+    }
+    
+    .modal-close {
+      position: absolute;
+      top: 20px;
+      right: 40px;
+      color: white;
+      font-size: 40px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    
+    .file-input-wrapper {
+      position: relative;
+      display: inline-block;
+      width: 100%;
+    }
+    
+    .file-input-label {
+      display: block;
+      padding: 10px 12px;
+      border: 2px dashed #8B4513;
+      border-radius: 8px;
+      background: #fffef0;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    
+    .file-input-label:hover {
+      background: #fff9e6;
+      border-color: #FFD700;
+    }
+    
+    .file-input {
+      display: none;
+    }
+
     @media (max-width: 768px) {
       header { flex-direction: column; gap: 15px; text-align: center; }
       .header-buttons { flex-direction: column; width: 100%; }
@@ -97,6 +299,28 @@
       .panel { padding: 20px; }
       h1 { font-size: 24px; }
       .form-title { font-size: 16px; }
+      .record-card {
+        flex-direction: column;
+      }
+      
+      .record-image {
+        width: 100%;
+        height: 200px;
+      }
+      
+      .tabs-container {
+        flex-direction: column;
+        gap: 5px;
+      }
+      
+      .tab-btn {
+        width: 100%;
+        border-radius: 15px;
+      }
+      
+      .tab-btn.active {
+        transform: none;
+      }
     }
   </style>
 </head>
@@ -105,7 +329,6 @@
     <div class="wrap">
       <header>
         <img alt="Cuphead Logo" class="logo" src="_img/CupheadLogo.png"/>
-        <!-- Agregando contenedor de botones con cerrar sesión -->
         <div class="header-buttons">
           <a aria-label="Volver al inicio" class="btn-back" href="index.html">Volver al inicio</a>
           <button aria-label="Cerrar sesión" class="btn-logout" onclick="cerrarSesion()">Cerrar sesión</button>
@@ -114,19 +337,61 @@
       
       <div class="panel">
         <h1>Comunidad Cuphead</h1>
-        <div class="user-info" id="userInfo" style="display:none;">
-          <!-- Mostrar usuario logueado -->
+        <div class="user-info" id="userInfo" style="display:none;"></div>
+        
+        <!-- Agregando sistema de tabs -->
+        <div class="tabs-container">
+          <button class="tab-btn active" onclick="switchTab('comentarios')">Comentarios</button>
+          <button class="tab-btn" onclick="switchTab('records')">Récords</button>
         </div>
         
-        <div class="form-section">
-          <div class="form-title">Comparte tu experiencia</div>
-          <div id="formMsg" class="msg msg-hidden" role="alert" aria-live="polite"></div>
+        <!-- TAB DE COMENTARIOS -->
+        <div id="tab-comentarios" class="tab-content active">
+          <div class="form-section">
+            <div class="form-title">Comparte tu experiencia</div>
+            <div id="formMsg" class="msg msg-hidden" role="alert" aria-live="polite"></div>
+            
+            <form id="commentForm" method="POST">
+              <div class="form-group">
+                <label for="commentPage">¿Sobre qué aspecto del juego quieres comentar?</label>
+                <select id="commentPage" name="pagina" required style="width: 100%; padding: 10px 12px; border: 2px solid #8B4513; border-radius: 8px; font-size: 14px;">
+                  <option value="">Selecciona una página</option>
+                  <option value="personajes">Personajes</option>
+                  <option value="juego">El Juego</option>
+                  <option value="islas">Islas</option>
+                  <option value="isla1">Isla 1</option>
+                  <option value="isla2">Isla 2</option>
+                  <option value="isla3">Isla 3</option>
+                  <option value="jefes-finales">Jefes Finales</option>
+                  <option value="logros">Logros</option>
+                  <option value="secretos">Secretos</option>
+                  <option value="curso">Curso</option>
+                  <option value="dlc">DLC</option>
+                  <option value="desarrolladores">Desarrolladores</option>
+                </select>
+              </div>
+              
+              <div class="form-group">
+                <label for="commentTitle">Título de tu comentario</label>
+                <input id="commentTitle" name="titulo" type="text" placeholder="Ej: Mi mejor estrategia para King Dice" required/>
+              </div>
+              
+              <div class="form-group">
+                <label for="commentText">Tu comentario</label>
+                <textarea id="commentText" name="contenido" placeholder="Escribe tu experiencia, trucos o preguntas..." required></textarea>
+              </div>
+              
+              <button class="btn-submit" type="submit">Publicar comentario</button>
+            </form>
+          </div>
           
-          <form id="commentForm" method="POST">
-            <div class="form-group">
-              <label for="commentPage">¿Sobre qué aspecto del juego quieres comentar?</label>
-              <select id="commentPage" name="pagina" required style="width: 100%; padding: 10px 12px; border: 2px solid #8B4513; border-radius: 8px; font-size: 14px;">
-                <option value="">Selecciona una página</option>
+          <div class="comments-section">
+            <div class="comments-title">Comentarios recientes</div>
+            
+            <div style="margin-bottom: 20px;">
+              <label for="pageFilter" style="display: block; font-weight: bold; margin-bottom: 8px; font-size: 14px;">Filtrar por sección:</label>
+              <select id="pageFilter" style="width: 100%; padding: 10px 12px; border: 2px solid #8B4513; border-radius: 8px; font-size: 14px;">
+                <option value="">Todas las secciones</option>
                 <option value="personajes">Personajes</option>
                 <option value="juego">El Juego</option>
                 <option value="islas">Islas</option>
@@ -142,55 +407,153 @@
               </select>
             </div>
             
-            <div class="form-group">
-              <label for="commentTitle">Título de tu comentario</label>
-              <input id="commentTitle" name="titulo" type="text" placeholder="Ej: Mi mejor estrategia para King Dice" required/>
-            </div>
-            
-            <div class="form-group">
-              <label for="commentText">Tu comentario</label>
-              <textarea id="commentText" name="contenido" placeholder="Escribe tu experiencia, trucos o preguntas..." required></textarea>
-            </div>
-            
-            <button class="btn-submit" type="submit">Publicar comentario</button>
-          </form>
+            <div id="commentsList" class="loading">Cargando comentarios...</div>
+          </div>
         </div>
         
-        <div class="comments-section">
-          <div class="comments-title">Comentarios recientes</div>
-          
-          <!-- Agregar sistema de filtros por página -->
-          <div style="margin-bottom: 20px;">
-            <label for="pageFilter" style="display: block; font-weight: bold; margin-bottom: 8px; font-size: 14px;">Filtrar por sección:</label>
-            <select id="pageFilter" style="width: 100%; padding: 10px 12px; border: 2px solid #8B4513; border-radius: 8px; font-size: 14px;">
-              <option value="">Todas las secciones</option>
-              <option value="personajes">Personajes</option>
-              <option value="juego">El Juego</option>
-              <option value="islas">Islas</option>
-              <option value="isla1">Isla 1</option>
-              <option value="isla2">Isla 2</option>
-              <option value="isla3">Isla 3</option>
-              <option value="jefes-finales">Jefes Finales</option>
-              <option value="logros">Logros</option>
-              <option value="secretos">Secretos</option>
-              <option value="curso">Curso</option>
-              <option value="dlc">DLC</option>
-              <option value="desarrolladores">Desarrolladores</option>
-            </select>
+        <!-- TAB DE RÉCORDS -->
+        <div id="tab-records" class="tab-content">
+          <div class="form-section">
+            <div class="form-title">Enviar un récord</div>
+            <div id="recordFormMsg" class="msg msg-hidden" role="alert" aria-live="polite"></div>
+            
+            <form id="recordForm" method="POST" enctype="multipart/form-data">
+              <div class="form-group">
+                <label for="recordJefe">Jefe / Nivel</label>
+                <select id="recordJefe" name="jefe_nombre" required style="width: 100%; padding: 10px 12px; border: 2px solid #8B4513; border-radius: 8px; font-size: 14px;">
+                  <option value="">Selecciona un jefe o nivel</option>
+                  <option value="Root Pack">Root Pack</option>
+                  <option value="Goopy Le Grande">Goopy Le Grande</option>
+                  <option value="Hilda Berg">Hilda Berg</option>
+                  <option value="Cagney Carnation">Cagney Carnation</option>
+                  <option value="Ribby and Croaks">Ribby and Croaks</option>
+                  <option value="Baroness Von Bon Bon">Baroness Von Bon Bon</option>
+                  <option value="Beppi The Clown">Beppi The Clown</option>
+                  <option value="Djimmi The Great">Djimmi The Great</option>
+                  <option value="Grim Matchstick">Grim Matchstick</option>
+                  <option value="Wally Warbles">Wally Warbles</option>
+                  <option value="Rumor Honeybottoms">Rumor Honeybottoms</option>
+                  <option value="Captain Brineybeard">Captain Brineybeard</option>
+                  <option value="Sally Stageplay">Sally Stageplay</option>
+                  <option value="Werner Werman">Werner Werman</option>
+                  <option value="Dr. Kahl's Robot">Dr. Kahl's Robot</option>
+                  <option value="Cala Maria">Cala Maria</option>
+                  <option value="Phantom Express">Phantom Express</option>
+                  <option value="King Dice">King Dice</option>
+                  <option value="The Devil">The Devil</option>
+                </select>
+              </div>
+              
+              <div class="form-group">
+                <label for="recordCategoria">Categoría</label>
+                <select id="recordCategoria" name="categoria" required style="width: 100%; padding: 10px 12px; border: 2px solid #8B4513; border-radius: 8px; font-size: 14px;">
+                  <option value="">Selecciona una categoría</option>
+                  <option value="Tiempo">Mejor Tiempo</option>
+                  <option value="Puntuacion">Mayor Puntuación</option>
+                  <option value="Sin Daño">Sin Daño</option>
+                  <option value="Experto">Modo Experto</option>
+                </select>
+              </div>
+              
+              <div class="form-group">
+                <label for="recordValor">Valor del récord (Tiempo: MM:SS o Puntuación: número)</label>
+                <input id="recordValor" name="valor" type="text" placeholder="Ej: 02:35 o 15000" required/>
+              </div>
+              
+              <div class="form-group">
+                <label for="recordDescripcion">Descripción (opcional)</label>
+                <textarea id="recordDescripcion" name="descripcion" placeholder="Describe tu estrategia o logro..."></textarea>
+              </div>
+              
+              <div class="form-group">
+                <label>Imagen de prueba (obligatoria)</label>
+                <div class="file-input-wrapper">
+                  <input type="file" id="recordImagen" name="imagen_prueba" accept="image/*" class="file-input" required onchange="updateFileName(this)"/>
+                  <label for="recordImagen" class="file-input-label" id="fileLabel">
+                    📁 Seleccionar imagen (JPG, PNG, GIF - Máx 5MB)
+                  </label>
+                </div>
+              </div>
+              
+              <button class="btn-submit" type="submit">Enviar récord para verificación</button>
+            </form>
           </div>
           
-          <div id="commentsList" class="loading">Cargando comentarios...</div>
+          <div class="comments-section">
+            <div class="comments-title">Récords de la comunidad</div>
+            
+            <div style="margin-bottom: 20px; display: flex; gap: 10px; flex-wrap: wrap;">
+              <div style="flex: 1; min-width: 200px;">
+                <label for="recordJefeFilter" style="display: block; font-weight: bold; margin-bottom: 8px; font-size: 14px;">Filtrar por jefe:</label>
+                <select id="recordJefeFilter" style="width: 100%; padding: 10px 12px; border: 2px solid #8B4513; border-radius: 8px; font-size: 14px;">
+                  <option value="">Todos los jefes</option>
+                  <option value="Root Pack">Root Pack</option>
+                  <option value="Goopy Le Grande">Goopy Le Grande</option>
+                  <option value="Hilda Berg">Hilda Berg</option>
+                  <option value="Cagney Carnation">Cagney Carnation</option>
+                  <option value="Ribby and Croaks">Ribby and Croaks</option>
+                  <option value="Baroness Von Bon Bon">Baroness Von Bon Bon</option>
+                  <option value="Beppi The Clown">Beppi The Clown</option>
+                  <option value="Djimmi The Great">Djimmi The Great</option>
+                  <option value="Grim Matchstick">Grim Matchstick</option>
+                  <option value="Wally Warbles">Wally Warbles</option>
+                  <option value="Rumor Honeybottoms">Rumor Honeybottoms</option>
+                  <option value="Captain Brineybeard">Captain Brineybeard</option>
+                  <option value="Sally Stageplay">Sally Stageplay</option>
+                  <option value="Werner Werman">Werner Werman</option>
+                  <option value="Dr. Kahl's Robot">Dr. Kahl's Robot</option>
+                  <option value="Cala Maria">Cala Maria</option>
+                  <option value="Phantom Express">Phantom Express</option>
+                  <option value="King Dice">King Dice</option>
+                  <option value="The Devil">The Devil</option>
+                </select>
+              </div>
+              
+              <div style="flex: 1; min-width: 200px;">
+                <label for="recordCategoriaFilter" style="display: block; font-weight: bold; margin-bottom: 8px; font-size: 14px;">Filtrar por categoría:</label>
+                <select id="recordCategoriaFilter" style="width: 100%; padding: 10px 12px; border: 2px solid #8B4513; border-radius: 8px; font-size: 14px;">
+                  <option value="">Todas las categorías</option>
+                  <option value="Tiempo">Mejor Tiempo</option>
+                  <option value="Puntuacion">Mayor Puntuación</option>
+                  <option value="Sin Daño">Sin Daño</option>
+                  <option value="Experto">Modo Experto</option>
+                </select>
+              </div>
+            </div>
+            
+            <div id="recordsList" class="loading">Cargando récords...</div>
+          </div>
         </div>
       </div>
     </div>
   </main>
   
   <footer style="text-align: center; margin-top: 40px; padding: 20px; color: #8B4513;">
-    © 2025 Guía Cuphead - Todos los derechos reservados
+    <div style="display: flex; justify-content: center; gap: 15px; margin-bottom: 15px; flex-wrap: wrap;">
+      <a href="faq.html" style="color: #8B4513; text-decoration: none; font-weight: bold; padding: 8px 16px; background: rgba(255, 207, 15, 0.3); border-radius: 15px; transition: all 0.3s;" onmouseover="this.style.background='rgba(255, 207, 15, 0.5)'" onmouseout="this.style.background='rgba(255, 207, 15, 0.3)'">
+        Preguntas Frecuentes
+      </a>
+      <a href="quienes-somos.html" style="color: #8B4513; text-decoration: none; font-weight: bold; padding: 8px 16px; background: rgba(255, 207, 15, 0.3); border-radius: 15px; transition: all 0.3s;" onmouseover="this.style.background='rgba(255, 207, 15, 0.5)'" onmouseout="this.style.background='rgba(255, 207, 15, 0.3)'">
+        Quiénes Somos
+      </a>
+      <a href="galeria.html" style="color: #8B4513; text-decoration: none; font-weight: bold; padding: 8px 16px; background: rgba(255, 207, 15, 0.3); border-radius: 15px; transition: all 0.3s;" onmouseover="this.style.background='rgba(255, 207, 15, 0.5)'" onmouseout="this.style.background='rgba(255, 207, 15, 0.3)'">
+        Galería
+      </a>
+    </div>
+    <div id="fechaHora" style="margin-bottom: 10px; font-size: 14px; color: #654321;"></div>
+    <div>© 2025 Guía Cuphead - Todos los derechos reservados</div>
   </footer>
+
+  <!-- Modal para ver imágenes completas -->
+  <div id="imageModal" class="modal" onclick="closeModal()">
+    <span class="modal-close">&times;</span>
+    <img id="modalImage" class="modal-content" alt="Imagen de prueba del récord"/>
+  </div>
 
   <script>
     // Verificar si el usuario está logueado
+    let userRole = 'usuario'; // Variable global para almacenar el rol
+    
     function checkUserSession() {
       fetch('BD/check-session.php')
         .then(res => res.json())
@@ -198,6 +561,7 @@
           if (data.logueado) {
             document.getElementById('userInfo').textContent = 'Has accedido como: ' + data.usuario;
             document.getElementById('userInfo').style.display = 'block';
+            userRole = data.rol || 'usuario'; // Guardar rol globalmente
           } else {
             window.location.href = 'index.html';
           }
@@ -239,8 +603,136 @@
         });
     }
 
-    document.getElementById('pageFilter').addEventListener('change', loadComments);
+    function loadRecords() {
+      const jefeFilter = document.getElementById('recordJefeFilter').value;
+      const categoriaFilter = document.getElementById('recordCategoriaFilter').value;
+      
+      let url = 'BD/get-records.php?';
+      if (jefeFilter) url += 'jefe=' + encodeURIComponent(jefeFilter) + '&';
+      if (categoriaFilter) url += 'categoria=' + encodeURIComponent(categoriaFilter);
+      
+      fetch(url)
+        .then(res => res.json())
+        .then(data => {
+          const list = document.getElementById('recordsList');
+          
+          if (!data.records || data.records.length === 0) {
+            list.innerHTML = '<p style="text-align: center; color: #999;">No hay récords en esta categoría. ¡Sé el primero!</p>';
+            return;
+          }
 
+          list.innerHTML = data.records.map(r => {
+            const estadoBadge = `<span class="record-badge badge-${r.estado}">${r.estado.toUpperCase()}</span>`;
+            const isVerificador = (userRole === 'admin_verificador' || userRole === 'superadmin');
+            const verifyButtons = (r.estado === 'pendiente' && isVerificador) ? `
+              <div class="verify-actions">
+                <button class="btn-verify btn-approve" onclick="verifyRecord(${r.id}, 'aprobar')">✓ Aprobar</button>
+                <button class="btn-verify btn-reject" onclick="verifyRecord(${r.id}, 'rechazar')">✗ Rechazar</button>
+              </div>
+            ` : '';
+            
+            const comentarioVerif = r.comentario_verificacion ? `
+              <div style="margin-top: 8px; padding: 8px; background: #fff3cd; border-radius: 6px; font-size: 13px;">
+                <strong>Comentario del verificador:</strong> ${r.comentario_verificacion}
+              </div>
+            ` : '';
+            
+            return `
+              <div class="record-card">
+                <img src="${r.imagen_prueba}" alt="Prueba del récord" class="record-image" onclick="openModal('${r.imagen_prueba}')"/>
+                <div class="record-info">
+                  <div class="record-header">
+                    <div>
+                      <div class="record-user">${r.nombre_usuario}</div>
+                      <div style="font-size: 14px; color: #666; margin-top: 3px;">
+                        ${r.jefe_nombre} - ${r.categoria}
+                      </div>
+                    </div>
+                    ${estadoBadge}
+                  </div>
+                  <div class="record-value">${r.valor}</div>
+                  <div class="record-details">
+                    ${r.descripcion || 'Sin descripción'}
+                  </div>
+                  <div class="record-details" style="margin-top: 8px;">
+                    Enviado: ${new Date(r.fecha_creacion).toLocaleDateString('es-ES', {year: 'numeric', month: 'long', day: 'numeric'})}
+                    ${r.verificador_nombre ? ' | Verificado por: ' + r.verificador_nombre : ''}
+                  </div>
+                  ${comentarioVerif}
+                  ${verifyButtons}
+                </div>
+              </div>
+            `;
+          }).join('');
+        })
+        .catch(err => {
+          document.getElementById('recordsList').innerHTML = '<p style="color: #d32f2f;">Error al cargar récords</p>';
+        });
+    }
+    
+    function verifyRecord(recordId, accion) {
+      const comentario = prompt('Comentario (opcional):') || '';
+      
+      if (!confirm(`¿Estás seguro de ${accion} este récord?`)) {
+        return;
+      }
+      
+      const formData = new FormData();
+      formData.append('record_id', recordId);
+      formData.append('accion', accion);
+      formData.append('comentario', comentario);
+      
+      fetch('BD/verify-record.php', {
+        method: 'POST',
+        body: formData
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) {
+          alert(data.mensaje);
+          loadRecords();
+        } else {
+          alert('Error: ' + data.error);
+        }
+      })
+      .catch(() => alert('Error de conexión'));
+    }
+    
+    function openModal(imageSrc) {
+      document.getElementById('modalImage').src = imageSrc;
+      document.getElementById('imageModal').classList.add('active');
+    }
+    
+    function closeModal() {
+      document.getElementById('imageModal').classList.remove('active');
+    }
+    
+    function switchTab(tabName) {
+      // Ocultar todos los tabs
+      document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+      document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+      
+      // Mostrar tab seleccionado
+      document.getElementById('tab-' + tabName).classList.add('active');
+      event.target.classList.add('active');
+      
+      // Cargar contenido según el tab
+      if (tabName === 'records') {
+        loadRecords();
+      } else {
+        loadComments();
+      }
+    }
+    
+    function updateFileName(input) {
+      const label = document.getElementById('fileLabel');
+      if (input.files && input.files[0]) {
+        label.textContent = '✓ ' + input.files[0].name;
+        label.style.background = '#e8f5e9';
+        label.style.borderColor = '#4caf50';
+      }
+    }
+    
     // Enviar formulario
     document.getElementById('commentForm').addEventListener('submit', function(e) {
       e.preventDefault();
@@ -270,6 +762,58 @@
         msg.classList.remove('msg-hidden');
       });
     });
+    
+    document.getElementById('recordForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const formData = new FormData(this);
+      const msg = document.getElementById('recordFormMsg');
+
+      fetch('BD/upload-record.php', {
+        method: 'POST',
+        body: formData
+      })
+      .then(res => res.json())
+      .then(data => {
+        msg.classList.remove('msg-hidden');
+        if (data.success) {
+          msg.className = 'msg success';
+          msg.textContent = '✓ ' + data.mensaje;
+          document.getElementById('recordForm').reset();
+          document.getElementById('fileLabel').textContent = '📁 Seleccionar imagen (JPG, PNG, GIF - Máx 5MB)';
+          document.getElementById('fileLabel').style.background = '#fffef0';
+          document.getElementById('fileLabel').style.borderColor = '#8B4513';
+          setTimeout(() => {
+            switchTab('records');
+            loadRecords();
+          }, 1500);
+        } else {
+          msg.className = 'msg error';
+          msg.textContent = '✗ ' + (data.error || 'Error al enviar el récord');
+        }
+      })
+      .catch(() => {
+        msg.className = 'msg error';
+        msg.textContent = '✗ Error de conexión';
+        msg.classList.remove('msg-hidden');
+      });
+    });
+
+    function actualizarFechaHora() {
+      const ahora = new Date();
+      const opciones = { 
+        weekday: 'long', 
+        year: 'numeric', 
+        month: 'long', 
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit'
+      };
+      document.getElementById('fechaHora').textContent = ahora.toLocaleDateString('es-ES', opciones);
+    }
+    
+    actualizarFechaHora();
+    setInterval(actualizarFechaHora, 1000);
 
     // Inicializar
     checkUserSession();

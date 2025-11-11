@@ -27,8 +27,7 @@ if (empty($email) || empty($password)) {
     exit();
 }
 
-// Buscar usuario por correo electrónico
-$stmt = $conexion->prepare("SELECT id, nombre_usuario, contrasena FROM usuarios WHERE correo_electronico = ?");
+$stmt = $conexion->prepare("SELECT id, nombre_usuario, contrasena, rol, activo FROM usuarios WHERE correo_electronico = ?");
 if (!$stmt) {
     echo json_encode(['success' => false, 'error' => 'Error al preparar consulta: ' . $conexion->error]);
     exit();
@@ -40,10 +39,22 @@ $result = $stmt->get_result();
 
 if ($result->num_rows === 1) {
     $usuario = $result->fetch_assoc();
+    
+    if ($usuario['activo'] == 0) {
+        echo json_encode(['success' => false, 'error' => 'Tu cuenta ha sido deshabilitada. Contacta al administrador.']);
+        exit();
+    }
+    
     if (password_verify($password, $usuario['contrasena'])) {
         $_SESSION['usuario_id'] = $usuario['id'];
         $_SESSION['nombre_usuario'] = $usuario['nombre_usuario'];
-        echo json_encode(['success' => true, 'mensaje' => 'Inicio de sesión exitoso']);
+        $_SESSION['rol'] = $usuario['rol'] ?? 'usuario';
+        
+        echo json_encode([
+            'success' => true, 
+            'mensaje' => 'Inicio de sesión exitoso',
+            'rol' => $_SESSION['rol']
+        ]);
     } else {
         echo json_encode(['success' => false, 'error' => 'Contraseña incorrecta']);
     }

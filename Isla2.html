@@ -590,9 +590,42 @@ document.addEventListener('click', (e) => {
 });
    </script>
   </main>
-  <footer>
-   © 2025 Guía Cuphead - Todos los derechos reservados
-  </footer>
+   <footer style="text-align: center; margin-top: 40px; padding: 20px; color: #8B4513;">
+  <div style="display: flex; justify-content: center; gap: 15px; margin-bottom: 15px; flex-wrap: wrap;">
+    <a href="faq.html" style="color: #8B4513; text-decoration: none; font-weight: bold; padding: 8px 16px; background: rgba(255, 207, 15, 0.3); border-radius: 15px; transition: all 0.3s;" onmouseover="this.style.background='rgba(255, 207, 15, 0.5)'" onmouseout="this.style.background='rgba(255, 207, 15, 0.3)'">
+      Preguntas Frecuentes
+    </a>
+    <a href="quienes-somos.html" style="color: #8B4513; text-decoration: none; font-weight: bold; padding: 8px 16px; background: rgba(255, 207, 15, 0.3); border-radius: 15px; transition: all 0.3s;" onmouseover="this.style.background='rgba(255, 207, 15, 0.5)'" onmouseout="this.style.background='rgba(255, 207, 15, 0.3)'">
+      Quiénes Somos
+    </a>
+    <a href="galeria.html" style="color: #8B4513; text-decoration: none; font-weight: bold; padding: 8px 16px; background: rgba(255, 207, 15, 0.3); border-radius: 15px; transition: all 0.3s;" onmouseover="this.style.background='rgba(255, 207, 15, 0.5)'" onmouseout="this.style.background='rgba(255, 207, 15, 0.3)'">
+      Galería
+    </a>
+  </div>
+  
+  <div id="fechaHora" style="margin-bottom: 10px; font-size: 14px; color: #654321;"></div>
+  
+  <div>© 2025 Guía Cuphead - Todos los derechos reservados</div>
+  
+  <script>
+    function actualizarFechaHora() {
+      const ahora = new Date();
+      const opciones = { 
+        weekday: 'long', 
+        year: 'numeric', 
+        month: 'long', 
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit'
+      };
+      document.getElementById('fechaHora').textContent = ahora.toLocaleDateString('es-ES', opciones);
+    }
+    
+    actualizarFechaHora();
+    setInterval(actualizarFechaHora, 1000);
+  </script>
+</footer>
   <script src="search-database.js"></script>
   <script src="search-integration.js"></script>
  </body>

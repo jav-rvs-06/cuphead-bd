@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>Preguntas Frecuentes - Cuphead</title>
+  <meta name="description" content="Respuestas a las preguntas más frecuentes sobre Cuphead, trucos, controles, dificultad y secretos del juego.">
+  <link href="cuphead-seeklogo.ico" rel="icon" type="image/png"/>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #ffcf0f;
+      line-height: 1.6;
+      margin: 0;
+      padding: 20px;
+      color: #000;
+    }
+    
+    .container { max-width: 100%; margin: 0 auto; }
+    
+    .header-section {
+      position: relative; display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 20px; padding: 0 40px; min-height: 120px;
+    }
+    
+    .logo-section { display: flex; flex-direction: column; align-items: flex-start; z-index: 2; }
+    
+    .cuphead-logo-img { max-height: 100px; max-width: 300px; width: auto; height: auto; object-fit: contain; }
+    
+    .main-title-btn {
+      position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
+      font-size: 72px; font-weight: bold; color: white;
+      text-shadow: 4px 4px 0px #000, -2px -2px 0px #000, 2px -2px 0px #000, -2px 2px 0px #000;
+      background: none; border: none; cursor: pointer; padding: 0; white-space: nowrap; z-index: 1;
+    }
+    
+    .characters { max-height: 120px; max-width: 150px; width: auto; height: auto; object-fit: contain; z-index: 2; }
+    
+    .white-panel {
+      background: white; border-radius: 30px; padding: 30px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+      width: 100%; max-width: 1200px; margin: 0 auto;
+    }
+    
+    .search-container {
+      display: flex; align-items: center; background: #f5f5f5; border-radius: 25px; padding: 10px 20px;
+      margin-bottom: 20px; box-shadow: inset 0 2px 5px rgba(0,0,0,0.1);
+    }
+    
+    .back-button {
+      background: none; border: none; color: #333; font-size: 16px; cursor: pointer;
+      display: flex; align-items: center; gap: 5px; padding: 8px 12px;
+      border-radius: 20px; transition: background-color 0.3s; margin-right: 10px;
+    }
+    
+    .back-button:hover { background-color: #e0e0e0; }
+    
+    .hamburger { cursor: pointer; display: flex; flex-direction: column; gap: 4px; padding: 8px; }
+    
+    .hamburger span { width: 25px; height: 3px; background-color: #8B4513; transition: 0.3s; }
+    
+    .search-input { flex: 1; border: none; background: transparent; font-size: 16px; margin-left: 15px; outline: none; }
+    
+    .search-input::placeholder { color: #666; }
+    
+    .search-icon { font-size: 18px; cursor: pointer; color: #0066cc; }
+    
+    .nav-menu { background: white; padding: 15px 0; display: none; border-bottom: 1px solid #ddd; margin-bottom: 20px; }
+    
+    .nav-menu.active { display: block; }
+    
+    .nav-items { display: flex; justify-content: space-around; align-items: center; flex-wrap: wrap; gap: 10px; padding: 0 20px; }
+    
+    .nav-item {
+      background: none; border: none; font-size: 14px; font-weight: bold; color: #333; cursor: pointer;
+      padding: 8px 12px; border-radius: 5px; transition: background-color 0.3s;
+    }
+    
+    .nav-item:hover { background-color: #f0f0f0; }
+    
+    .page-title {
+      font-size: 28px; font-weight: bold; text-align: center;
+      margin: 30px 0; color: #8B4513; text-transform: uppercase;
+    }
+    
+    .faq-intro {
+      text-align: center; margin-bottom: 30px; color: #000; font-size: 16px;
+    }
+    
+    .faq-item {
+      margin-bottom: 20px; border-bottom: 2px solid #f0f0f0; padding-bottom: 15px;
+    }
+    
+    .faq-question {
+      font-size: 18px; font-weight: bold; color: #8B4513; margin-bottom: 10px;
+      cursor: pointer; display: flex; justify-content: space-between; align-items: center;
+      padding: 10px; border-radius: 5px; transition: background-color 0.3s;
+    }
+    
+    .faq-question:hover { background-color: #f8f8f8; }
+    
+    .faq-toggle {
+      font-size: 24px; font-weight: bold; transition: transform 0.3s;
+      color: #8B4513; min-width: 30px; text-align: center;
+    }
+    
+    .faq-answer {
+      color: #000; font-size: 14px; line-height: 1.6; margin-top: 10px;
+      padding-left: 10px; display: none; text-align: justify;
+    }
+    
+    .faq-answer.active { display: block; }
+    
+    .footer-links {
+      display: flex; justify-content: center; gap: 15px; flex-wrap: wrap;
+      margin-top: 20px; padding-top: 20px; border-top: 2px solid #f0f0f0;
+    }
+    
+    .footer-link {
+      background: rgba(255, 215, 0, 0.3); color: #8B4513; padding: 8px 16px;
+      border-radius: 15px; text-decoration: none; font-size: 14px; font-weight: bold;
+      transition: all 0.3s; border: 1px solid rgba(139, 69, 19, 0.3);
+    }
+    
+    .footer-link:hover {
+      background: rgba(255, 215, 0, 0.5); transform: translateY(-2px);
+    }
+    
+    @media (max-width: 768px) {
+      .header-section { flex-direction: column; gap: 15px; text-align: center; padding: 0 20px; position: static; }
+      .main-title-btn { position: static; transform: none; font-size: 48px; margin: 15px 0; }
+      .cuphead-logo-img { max-height: 80px; max-width: 250px; }
+      .characters { max-height: 100px; max-width: 120px; }
+      .white-panel { padding: 20px; }
+      .page-title { font-size: 24px; }
+      .faq-question { font-size: 16px; }
+      .faq-answer { font-size: 13px; }
+      .nav-items { flex-direction: column; gap: 5px; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <div class="container">
+      <header class="header-section">
+        <div class="logo-section">
+          <img alt="Cuphead Logo" class="cuphead-logo-img" src="_img/CupheadLogo.png"/>
+        </div>
+        <button aria-label="Ir al inicio" class="main-title-btn" onclick="goToHome()">
+          LA GUÍA DEFINITIVA
+        </button>
+        <img alt="Cuphead Characters" class="characters" src="_img/CupheadPersonajes.png"/>
+      </header>
+
+      <div class="white-panel">
+        <div class="search-container">
+          <button class="back-button" onclick="goBack()">← Volver</button>
+          <div aria-label="Abrir menú" class="hamburger" onclick="toggleMenu()" role="button" tabindex="0">
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+          <input aria-label="Buscar" class="search-input" placeholder="Busca tu tema preferido" type="text"/>
+          <span aria-hidden="true" class="search-icon">🔍</span>
+        </div>
+
+        <nav aria-label="Menú principal" class="nav-menu" id="navMenu">
+          <div class="nav-items">
+            <button class="nav-item" onclick="goToPage('juego')">JUEGO</button>
+            <button class="nav-item" onclick="goToPage('curso')">CURSO</button>
+            <button class="nav-item" onclick="goToPage('islas')">ISLAS</button>
+            <button class="nav-item" onclick="goToPage('dlc')">DLC</button>
+            <button class="nav-item" onclick="goToPage('jefes-finales')">JEFES FINALES</button>
+            <button class="nav-item" onclick="goToPage('logros')">LOGROS</button>
+            <button class="nav-item" onclick="goToPage('secretos')">SECRETOS</button>
+          </div>
+        </nav>
+
+        <h1 class="page-title">Preguntas Frecuentes</h1>
+
+        <p class="faq-intro">
+          Aquí encontrarás respuestas a las preguntas más comunes sobre Cuphead. 
+          Haz clic en cada pregunta para ver la respuesta.
+        </p>
+
+        <div class="faq-item">
+          <div class="faq-question" onclick="toggleFaq(this)">
+            ¿Cuál es la mejor arma en Cuphead?
+            <span class="faq-toggle">+</span>
+          </div>
+          <div class="faq-answer">
+            No hay una "mejor" arma universal. Depende del jefe y tu estilo de juego. 
+            El Peashooter es excelente para daño constante, el Spread es brutal de cerca, 
+            el Chaser te permite enfocarte en esquivar, y el Charge es potente si tienes buen timing. 
+            La clave es cambiar de arma según la situación.
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-question" onclick="toggleFaq(this)">
+            ¿Puedo jugar en cooperativo local?
+            <span class="faq-toggle">+</span>
+          </div>
+          <div class="faq-answer">
+            Sí, Cuphead tiene modo cooperativo local para 2 jugadores. El segundo jugador controla a Mugman. 
+            Ten en cuenta que los jefes tienen más vida en modo cooperativo, pero también puedes revivir a tu compañero.
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-question" onclick="toggleFaq(this)">
+            ¿Cómo desbloqueo nuevas armas?
+            <span class="faq-toggle">+</span>
+          </div>
+          <div class="faq-answer">
+            Debes recolectar monedas en los niveles Run 'n Gun y en el mapa del mundo. 
+            Con las monedas, visita la tienda de Porkrind (el cerdo) para comprar armas, amuletos y Super Artes.
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-question" onclick="toggleFaq(this)">
+            ¿El modo Simple sirve para progresar?
+            <span class="faq-toggle">+</span>
+          </div>
+          <div class="faq-answer">
+            No. El modo Simple te permite practicar patrones, pero no muestra todas las fases de los jefes 
+            y no otorga contratos de alma, que son necesarios para desbloquear las siguientes islas. 
+            Debes jugar en modo Normal o superior para progresar.
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-question" onclick="toggleFaq(this)">
+            ¿Qué hace el parry y cómo lo uso?
+            <span class="faq-toggle">+</span>
+          </div>
+          <div class="faq-answer">
+            El parry se activa saltando sobre objetos rosas. Te permite destruir proyectiles, 
+            cargar tu medidor de Super Arte y en algunos casos es obligatorio para progresar. 
+            Dominar el parry es esencial para completar el juego.
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-question" onclick="toggleFaq(this)">
+            ¿Cuánto dura el juego?
+            <span class="faq-toggle">+</span>
+          </div>
+          <div class="faq-answer">
+            Depende de tu habilidad. Para un jugador promedio, completar la campaña principal 
+            puede tomar entre 10 y 20 horas. Si buscas el 100% con todos los logros y rangos S, 
+            puedes invertir 30-50 horas o más.
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-question" onclick="toggleFaq(this)">
+            ¿Vale la pena el DLC The Delicious Last Course?
+            <span class="faq-toggle">+</span>
+          </div>
+          <div class="faq-answer">
+            Absolutamente. El DLC añade una nueva isla completa con 6 jefes nuevos, 
+            un personaje jugable (Ms. Chalice), nuevas armas, amuletos y mecánicas. 
+            Es considerado por muchos como una extensión esencial del juego base.
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-question" onclick="toggleFaq(this)">
+            ¿Cuphead es realmente tan difícil?
+            <span class="faq-toggle">+</span>
+          </div>
+          <div class="faq-answer">
+            Sí, es un juego desafiante que requiere paciencia, práctica y memoria de patrones. 
+            Sin embargo, la dificultad es justa: cada muerte es una oportunidad de aprender. 
+            Con dedicación, cualquier jugador puede completarlo.
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-question" onclick="toggleFaq(this)">
+            ¿Hay trucos o códigos secretos?
+            <span class="faq-toggle">+</span>
+          </div>
+          <div class="faq-answer">
+            Cuphead no tiene códigos de trampa tradicionales, pero sí hay secretos como monedas ocultas, 
+            atajos en el mapa, interacciones especiales con NPCs y easter eggs. 
+            Explora cada rincón del mapa para descubrirlos.
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-question" onclick="toggleFaq(this)">
+            ¿Puedo cambiar la dificultad de los jefes en cualquier momento?
+            <span class="faq-toggle">+</span>
+          </div>
+          <div class="faq-answer">
+            Sí, puedes elegir la dificultad antes de cada pelea. Sin embargo, como mencionamos, 
+            el modo Simple no otorga contratos y no es válido para progresar. 
+            Para desbloquear contenido nuevo, debes jugar en Normal o Expert.
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <script>
+      function toggleMenu() {
+        const navMenu = document.getElementById('navMenu');
+        navMenu.classList.toggle('active');
+      }
+      
+      function goToPage(page) {
+        window.location.href = page + '.html';
+        const navMenu = document.getElementById('navMenu');
+        if (navMenu) navMenu.classList.remove('active');
+      }
+      
+      function goToHome() { window.location.href = 'index.html'; }
+      function goBack() { window.location.href = 'index.html'; }
+
+      function toggleFaq(element) {
+        const answer = element.nextElementSibling;
+        const toggle = element.querySelector('.faq-toggle');
+        
+        answer.classList.toggle('active');
+        
+        if (answer.classList.contains('active')) {
+          toggle.textContent = '−';
+        } else {
+          toggle.textContent = '+';
+        }
+      }
+
+      document.addEventListener('click', (e) => {
+        const navMenu = document.getElementById('navMenu');
+        const hamburger = document.querySelector('.hamburger');
+        if (!navMenu) return;
+        if (!navMenu.contains(e.target) && hamburger && !hamburger.contains(e.target)) {
+          navMenu.classList.remove('active');
+        }
+      });
+    </script>
+  </main>
+
+  <footer style="text-align: center; margin-top: 40px; padding: 20px; color: #8B4513;">
+    <div style="display: flex; justify-content: center; gap: 15px; margin-bottom: 15px; flex-wrap: wrap;">
+      <a href="quienes-somos.html" style="color: #8B4513; text-decoration: none; font-weight: bold; padding: 8px 16px; background: rgba(255, 207, 15, 0.3); border-radius: 15px; transition: all 0.3s;" onmouseover="this.style.background='rgba(255, 207, 15, 0.5)'" onmouseout="this.style.background='rgba(255, 207, 15, 0.3)'">
+        Quiénes Somos
+      </a>
+      <a href="galeria.html" style="color: #8B4513; text-decoration: none; font-weight: bold; padding: 8px 16px; background: rgba(255, 207, 15, 0.3); border-radius: 15px; transition: all 0.3s;" onmouseover="this.style.background='rgba(255, 207, 15, 0.5)'" onmouseout="this.style.background='rgba(255, 207, 15, 0.3)'">
+        Galería
+      </a>
+      <a href="index.html" style="color: #8B4513; text-decoration: none; font-weight: bold; padding: 8px 16px; background: rgba(255, 207, 15, 0.3); border-radius: 15px; transition: all 0.3s;" onmouseover="this.style.background='rgba(255, 207, 15, 0.5)'" onmouseout="this.style.background='rgba(255, 207, 15, 0.3)'">
+        Inicio
+      </a>
+    </div>
+    
+    <div id="fechaHora" style="margin-bottom: 10px; font-size: 14px; color: #654321;"></div>
+    
+    <div>© 2025 Guía Cuphead - Todos los derechos reservados</div>
+    
+    <script>
+      function actualizarFechaHora() {
+        const ahora = new Date();
+        const opciones = { 
+          weekday: 'long', 
+          year: 'numeric', 
+          month: 'long', 
+          day: 'numeric',
+          hour: '2-digit',
+          minute: '2-digit',
+          second: '2-digit'
+        };
+        document.getElementById('fechaHora').textContent = ahora.toLocaleDateString('es-ES', opciones);
+      }
+      
+      actualizarFechaHora();
+      setInterval(actualizarFechaHora, 1000);
+    </script>
+  </footer>
+
+  <script src="search-database.js"></script>
+  <script src="search-integration.js"></script>
+</body>
+</html>

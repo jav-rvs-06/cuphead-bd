@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>Panel SuperAdmin - Cuphead</title>
+  <link href="cuphead-seeklogo.ico" rel="icon" type="image/png"/>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: Arial, sans-serif; background-color: #ffcf0f;
+      line-height: 1.6; margin: 0; padding: 20px; color: #000;
+    }
+    .container { max-width: 100%; margin: 0 auto; }
+    .header-section {
+      position: relative; display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 20px; padding: 0 40px; min-height: 120px;
+    }
+    .logo-section { display: flex; flex-direction: column; align-items: flex-start; z-index: 2; }
+    .cuphead-logo-img { max-height: 100px; max-width: 300px; width: auto; height: auto; object-fit: contain; }
+    .main-title-btn {
+      position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
+      font-size: 72px; font-weight: bold; color: white;
+      text-shadow: 4px 4px 0px #000, -2px -2px 0px #000, 2px -2px 0px #000, -2px 2px 0px #000;
+      background: none; border: none; cursor: pointer; padding: 0; white-space: nowrap; z-index: 1;
+    }
+    .characters { max-height: 120px; max-width: 150px; width: auto; height: auto; object-fit: contain; z-index: 2; }
+    .white-panel {
+      background: white; border-radius: 30px; padding: 30px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+      width: 100%; max-width: 1400px; margin: 0 auto;
+    }
+    .back-btn {
+      background: linear-gradient(45deg, #FFD700, #FFA500);
+      color: #8B4513; border: 2px solid #8B4513;
+      padding: 10px 20px; border-radius: 20px; cursor: pointer;
+      font-size: 14px; font-weight: bold; margin-bottom: 20px;
+      transition: all 0.3s;
+    }
+    .back-btn:hover { transform: translateY(-2px); box-shadow: 0 4px 8px rgba(0,0,0,0.2); }
+    .admin-title {
+      font-size: 32px; font-weight: bold; text-align: center;
+      margin: 20px 0; color: #8B4513; text-transform: uppercase;
+    }
+    .role-badge {
+      display: inline-block; padding: 8px 15px; border-radius: 15px;
+      font-size: 14px; font-weight: bold; margin-left: 10px;
+    }
+    .role-superadmin { background: #e74c3c; color: white; }
+    #accessDenied { display: none; text-align: center; padding: 50px; }
+    #accessDenied h2 { color: #8B4513; font-size: 24px; margin-bottom: 15px; }
+    #adminPanel { display: none; }
+    table {
+      width: 100%; border-collapse: collapse; margin-top: 20px;
+      background: white; border-radius: 10px; overflow: hidden;
+    }
+    th, td { padding: 12px; text-align: left; border-bottom: 1px solid #ddd; }
+    th { background: #8B4513; color: white; font-weight: bold; }
+    tr:hover { background: #f8f9fa; }
+    .btn {
+      padding: 8px 15px; border: none; border-radius: 15px;
+      cursor: pointer; font-size: 13px; font-weight: bold;
+      transition: all 0.3s; margin: 2px;
+    }
+    .btn-danger { background: #e74c3c; color: white; }
+    .btn-danger:hover { background: #c0392b; transform: translateY(-1px); }
+    .btn-success { background: #27ae60; color: white; }
+    .btn-success:hover { background: #229954; transform: translateY(-1px); }
+    .btn-primary { background: #3498db; color: white; }
+    .btn-primary:hover { background: #2980b9; transform: translateY(-1px); }
+    .btn-warning { background: #f39c12; color: white; }
+    .btn-warning:hover { background: #d68910; transform: translateY(-1px); }
+    .status-badge {
+      padding: 5px 10px; border-radius: 10px;
+      font-size: 12px; font-weight: bold; display: inline-block;
+    }
+    .status-active { background: #27ae60; color: white; }
+    .status-inactive { background: #e74c3c; color: white; }
+    .role-usuario { background: #95a5a6; color: white; }
+    .role-admin_moderador { background: #3498db; color: white; }
+    .role-admin_verificador { background: #9b59b6; color: white; }
+    .role-superadmin-badge { background: #e74c3c; color: white; }
+    .message {
+      padding: 15px; border-radius: 10px; margin-bottom: 20px;
+      display: none; font-weight: bold;
+    }
+    .message.success { background: #d4edda; color: #155724; border: 2px solid #c3e6cb; }
+    .message.error { background: #f8d7da; color: #721c24; border: 2px solid #f5c6cb; }
+    .loading { text-align: center; padding: 30px; font-size: 18px; color: #8B4513; font-weight: bold; }
+    .section-title {
+      font-size: 22px; margin: 30px 0 20px 0; color: #8B4513;
+      border-bottom: 3px solid #8B4513; padding-bottom: 10px; font-weight: bold;
+    }
+    select.role-select {
+      padding: 8px 15px; border-radius: 10px; border: 2px solid #8B4513;
+      background: white; font-size: 13px; font-weight: bold; cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <div class="container">
+      <header class="header-section">
+        <div class="logo-section">
+          <img alt="Cuphead Logo" class="cuphead-logo-img" src="_img/CupheadLogo.png"/>
+        </div>
+        <button aria-label="Ir al inicio" class="main-title-btn" onclick="goToHome()">
+          LA GUÍA DEFINITIVA
+        </button>
+        <img alt="Cuphead Characters" class="characters" src="_img/CupheadPersonajes.png"/>
+      </header>
+
+      <div class="white-panel">
+        <button class="back-btn" onclick="goBack()">← Volver al Inicio</button>
+
+        <h1 class="admin-title">
+          Panel SuperAdmin
+          <span class="role-badge role-superadmin">SUPERADMIN</span>
+        </h1>
+
+        <div id="accessDenied">
+          <h2>Acceso Denegado</h2>
+          <p>Solo el SuperAdmin puede acceder a esta página.</p>
+          <button class="btn btn-danger" onclick="goBack()" style="margin-top: 20px;">Volver al Inicio</button>
+        </div>
+
+        <div id="adminPanel">
+          <div id="message" class="message"></div>
+
+          <h2 class="section-title">Gestión de Roles de Administradores</h2>
+          <p style="margin-bottom: 20px; color: #666;">
+            Asigna roles específicos a los usuarios. Los administradores tendrán permisos según su rol:
+          </p>
+          <ul style="margin-bottom: 30px; color: #666; line-height: 2;">
+            <li><strong style="color: #3498db;">Admin Moderador:</strong> Gestiona usuarios y comentarios</li>
+            <li><strong style="color: #9b59b6;">Admin Verificador:</strong> Verifica y aprueba récords enviados por usuarios</li>
+            <li><strong style="color: #e74c3c;">SuperAdmin:</strong> Control total (no modificable)</li>
+          </ul>
+
+          <div id="loading" class="loading">Cargando usuarios...</div>
+          <div id="usersTable"></div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      function checkSuperAdminAccess() {
+        fetch('BD/check-session.php')
+          .then(res => res.json())
+          .then(data => {
+            if (data.logueado && data.rol === 'superadmin') {
+              document.getElementById('adminPanel').style.display = 'block';
+              loadAllUsers();
+            } else {
+              document.getElementById('accessDenied').style.display = 'block';
+            }
+          })
+          .catch(() => {
+            document.getElementById('accessDenied').style.display = 'block';
+          });
+      }
+
+      function loadAllUsers() {
+        document.getElementById('loading').style.display = 'block';
+        document.getElementById('usersTable').innerHTML = '';
+
+        fetch('BD/get-all-users.php')
+          .then(res => res.json())
+          .then(data => {
+            document.getElementById('loading').style.display = 'none';
+
+            if (!data.success) {
+              showMessage(data.error, 'error');
+              return;
+            }
+
+            if (data.usuarios.length === 0) {
+              document.getElementById('usersTable').innerHTML = '<p>No hay usuarios registrados.</p>';
+              return;
+            }
+
+            let table = '<table><thead><tr>';
+            table += '<th>ID</th><th>Usuario</th><th>Correo</th><th>Rol Actual</th><th>Estado</th><th>Fecha Registro</th><th>Cambiar Rol</th><th>Acciones</th>';
+            table += '</tr></thead><tbody>';
+
+            data.usuarios.forEach(user => {
+              let roleBadgeClass = '';
+              let roleText = '';
+              
+              switch(user.rol) {
+                case 'usuario':
+                  roleBadgeClass = 'role-usuario';
+                  roleText = 'Usuario';
+                  break;
+                case 'admin_moderador':
+                  roleBadgeClass = 'role-admin_moderador';
+                  roleText = 'Admin Moderador';
+                  break;
+                case 'admin_verificador':
+                  roleBadgeClass = 'role-admin_verificador';
+                  roleText = 'Admin Verificador';
+                  break;
+                case 'superadmin':
+                  roleBadgeClass = 'role-superadmin-badge';
+                  roleText = 'SuperAdmin';
+                  break;
+              }
+
+              const roleBadge = `<span class="status-badge ${roleBadgeClass}">${roleText}</span>`;
+              const statusBadge = user.activo == 1 ? 
+                '<span class="status-badge status-active">ACTIVO</span>' : 
+                '<span class="status-badge status-inactive">INACTIVO</span>';
+              
+              let roleSelector = '';
+              let toggleBtn = '';
+              
+              if (user.rol !== 'superadmin') {
+                roleSelector = `
+                  <select class="role-select" id="role-${user.id}" onchange="changeUserRole(${user.id})">
+                    <option value="usuario" ${user.rol === 'usuario' ? 'selected' : ''}>Usuario</option>
+                    <option value="admin_moderador" ${user.rol === 'admin_moderador' ? 'selected' : ''}>Admin Moderador</option>
+                    <option value="admin_verificador" ${user.rol === 'admin_verificador' ? 'selected' : ''}>Admin Verificador</option>
+                  </select>
+                `;
+                
+                toggleBtn = user.activo == 1 ? 
+                  `<button class="btn btn-warning" onclick="toggleUser(${user.id}, 0)">Deshabilitar</button>` : 
+                  `<button class="btn btn-success" onclick="toggleUser(${user.id}, 1)">Habilitar</button>`;
+              } else {
+                roleSelector = '<span style="color: #e74c3c; font-weight: bold;">No modificable</span>';
+                toggleBtn = '<span style="color: #999;">Protegido</span>';
+              }
+
+              table += `<tr>
+                <td>${user.id}</td>
+                <td>${user.nombre_usuario}</td>
+                <td>${user.correo_electronico}</td>
+                <td>${roleBadge}</td>
+                <td>${statusBadge}</td>
+                <td>${new Date(user.fecha_registro).toLocaleDateString('es-ES')}</td>
+                <td>${roleSelector}</td>
+                <td>${toggleBtn}</td>
+              </tr>`;
+            });
+
+            table += '</tbody></table>';
+            document.getElementById('usersTable').innerHTML = table;
+          })
+          .catch(err => {
+            document.getElementById('loading').style.display = 'none';
+            showMessage('Error al cargar usuarios', 'error');
+          });
+      }
+
+      function changeUserRole(userId) {
+        const newRole = document.getElementById(`role-${userId}`).value;
+        
+        if (!confirm(`¿Cambiar el rol de este usuario a "${newRole}"?`)) {
+          loadAllUsers(); // Recargar para restaurar el valor original
+          return;
+        }
+
+        const formData = new FormData();
+        formData.append('usuario_id', userId);
+        formData.append('rol', newRole);
+
+        fetch('BD/assign-admin-role.php', {
+          method: 'POST',
+          body: formData
+        })
+        .then(res => res.json())
+        .then(data => {
+          if (data.success) {
+            showMessage(data.mensaje, 'success');
+            loadAllUsers();
+          } else {
+            showMessage(data.error, 'error');
+            loadAllUsers();
+          }
+        })
+        .catch(() => {
+          showMessage('Error al actualizar rol', 'error');
+          loadAllUsers();
+        });
+      }
+
+      function toggleUser(userId, newStatus) {
+        if (!confirm(newStatus == 1 ? '¿Habilitar este usuario?' : '¿Deshabilitar este usuario?')) {
+          return;
+        }
+
+        const formData = new FormData();
+        formData.append('usuario_id', userId);
+        formData.append('activo', newStatus);
+
+        fetch('BD/admin-toggle-user.php', {
+          method: 'POST',
+          body: formData
+        })
+        .then(res => res.json())
+        .then(data => {
+          if (data.success) {
+            showMessage(data.mensaje, 'success');
+            loadAllUsers();
+          } else {
+            showMessage(data.error, 'error');
+          }
+        })
+        .catch(() => {
+          showMessage('Error al actualizar usuario', 'error');
+        });
+      }
+
+      function showMessage(message, type) {
+        const msgElement = document.getElementById('message');
+        msgElement.textContent = message;
+        msgElement.className = `message ${type}`;
+        msgElement.style.display = 'block';
+
+        setTimeout(() => {
+          msgElement.style.display = 'none';
+        }, 5000);
+      }
+
+      function goToHome() { window.location.href = 'index.html'; }
+      function goBack() { window.location.href = 'index.html'; }
+
+      checkSuperAdminAccess();
+    </script>
+  </main>
+
+  <footer style="text-align: center; margin-top: 40px; padding: 20px; color: #8B4513;">
+    © 2025 Guía Cuphead - Todos los derechos reservados
+  </footer>
+</body>
+</html>
