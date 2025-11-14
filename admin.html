@@ -203,7 +203,10 @@
       </header>
 
       <div class="white-panel">
-        <button class="back-btn" onclick="goBack()">← Volver al Inicio</button>
+        <div style="display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap;">
+          <button class="back-btn" onclick="goBack()">← Volver al Inicio</button>
+          <button class="back-btn" onclick="cerrarSesion()" style="background: #fff; color: #8B4513;">Cerrar sesión</button>
+        </div>
 
         <h1 class="admin-title">Panel de Administración</h1>
 
@@ -238,6 +241,7 @@
 
     <script>
       let currentTab = 'users';
+      let currentUserRole = '';
 
       function switchTab(tab) {
         currentTab = tab;
@@ -263,9 +267,24 @@
         fetch('BD/admin-check.php')
           .then(res => res.json())
           .then(data => {
-            if (data.is_admin) {
+            if (data.is_admin && data.rol !== 'admin_records') {
+              currentUserRole = data.rol;
               document.getElementById('adminPanel').style.display = 'block';
-              loadUsers();
+              
+              const usersTab = document.querySelector('[onclick="switchTab(\'users\')"]');
+              const commentsTab = document.querySelector('[onclick="switchTab(\'comments\')"]');
+              
+              if (data.rol === 'admin_comentarios') {
+                // Solo comentarios
+                usersTab.style.display = 'none';
+                switchTab('comments');
+              } else if (data.rol === 'admin_comunidad') {
+                // Solo usuarios y comentarios
+                loadUsers();
+              } else {
+                // Superadmin - acceso completo
+                loadUsers();
+              }
             } else {
               document.getElementById('accessDenied').style.display = 'block';
             }
@@ -304,21 +323,38 @@
                 '<span class="status-badge">USER</span>';
               
               const statusBadge = user.activo == 1 ? 
-                '<span class="status-badge  -active">ACTIVO</span>' : 
+                '<span class="status-badge status-active">ACTIVO</span>' : 
                 '<span class="status-badge status-inactive">INACTIVO</span>';
               
               const toggleBtn = user.activo == 1 ? 
                 `<button class="btn btn-warning" onclick="toggleUser(${user.id}, 0)">Deshabilitar</button>` : 
                 `<button class="btn btn-success" onclick="toggleUser(${user.id}, 1)">Habilitar</button>`;
 
+              const isSuperadmin = user.rol === 'superadmin';
+              const roleDisplay = isSuperadmin ? 
+                '<span class="status-badge status-admin">SUPERADMIN</span>' : 
+                `<select id="role-${user.id}" style="padding: 8px; border-radius: 5px; border: 2px solid #8B4513; cursor: pointer;">
+                  <option value="usuario" ${user.rol === 'usuario' ? 'selected' : ''}>Usuario Normal</option>
+                  <option value="admin_comentarios" ${user.rol === 'admin_comentarios' ? 'selected' : ''}>Admin Comentarios</option>
+                  <option value="admin_records" ${user.rol === 'admin_records' ? 'selected' : ''}>Admin Records</option>
+                  <option value="admin_comunidad" ${user.rol === 'admin_comunidad' ? 'selected' : ''}>Admin Comunidad</option>
+                </select>`;
+
+              const roleActions = isSuperadmin ? 
+                '<span style="color: #999; font-style: italic;">Protegido</span>' : 
+                `<button class="btn btn-warning" onclick="updateRole(${user.id}, document.getElementById('role-${user.id}').value)">Actualizar Rol</button>`;
+
               table += `<tr>
                 <td>${user.id}</td>
                 <td>${user.nombre_usuario}</td>
                 <td>${user.correo_electronico}</td>
-                <td>${roleBadge}</td>
+                <td>${roleDisplay}</td>
                 <td>${statusBadge}</td>
                 <td>${new Date(user.fecha_registro).toLocaleDateString('es-ES')}</td>
-                <td>${toggleBtn}</td>
+                <td>
+                  ${roleActions}
+                  ${toggleBtn}
+                </td>
               </tr>`;
             });
 
@@ -355,6 +391,29 @@
         })
         .catch(() => {
           showMessage('usersMessage', 'Error al actualizar usuario', 'error');
+        });
+      }
+
+      function updateRole(userId, newRole) {
+        const formData = new FormData();
+        formData.append('usuario_id', userId);
+        formData.append('rol', newRole);
+
+        fetch('BD/admin-update-role.php', {
+          method: 'POST',
+          body: formData
+        })
+        .then(res => res.json())
+        .then(data => {
+          if (data.success) {
+            showMessage('usersMessage', data.mensaje, 'success');
+            loadUsers();
+          } else {
+            showMessage('usersMessage', data.error, 'error');
+          }
+        })
+        .catch(() => {
+          showMessage('usersMessage', 'Error al actualizar rol', 'error');
         });
       }
 
@@ -446,45 +505,18 @@
       function goToHome() { window.location.href = 'index.html'; }
       function goBack() { window.location.href = 'index.html'; }
 
+      function cerrarSesion() {
+        if (confirm('¿Estás seguro que deseas cerrar sesión?')) {
+          window.location.href = 'BD/logout.php';
+        }
+      }
+
       checkAdminAccess();
     </script>
   </main>
 
   <footer style="text-align: center; margin-top: 40px; padding: 20px; color: #8B4513;">
-  <div style="display: flex; justify-content: center; gap: 15px; margin-bottom: 15px; flex-wrap: wrap;">
-    <a href="faq.html" style="color: #8B4513; text-decoration: none; font-weight: bold; padding: 8px 16px; background: rgba(255, 207, 15, 0.3); border-radius: 15px; transition: all 0.3s;" onmouseover="this.style.background='rgba(255, 207, 15, 0.5)'" onmouseout="this.style.background='rgba(255, 207, 15, 0.3)'">
-      Preguntas Frecuentes
-    </a>
-    <a href="quienes-somos.html" style="color: #8B4513; text-decoration: none; font-weight: bold; padding: 8px 16px; background: rgba(255, 207, 15, 0.3); border-radius: 15px; transition: all 0.3s;" onmouseover="this.style.background='rgba(255, 207, 15, 0.5)'" onmouseout="this.style.background='rgba(255, 207, 15, 0.3)'">
-      Quiénes Somos
-    </a>
-    <a href="galeria.html" style="color: #8B4513; text-decoration: none; font-weight: bold; padding: 8px 16px; background: rgba(255, 207, 15, 0.3); border-radius: 15px; transition: all 0.3s;" onmouseover="this.style.background='rgba(255, 207, 15, 0.5)'" onmouseout="this.style.background='rgba(255, 207, 15, 0.3)'">
-      Galería
-    </a>
-  </div>
-  
-  <div id="fechaHora" style="margin-bottom: 10px; font-size: 14px; color: #654321;"></div>
-  
-  <div>© 2025 Guía Cuphead - Todos los derechos reservados</div>
-  
-  <script>
-    function actualizarFechaHora() {
-      const ahora = new Date();
-      const opciones = { 
-        weekday: 'long', 
-        year: 'numeric', 
-        month: 'long', 
-        day: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit',
-        second: '2-digit'
-      };
-      document.getElementById('fechaHora').textContent = ahora.toLocaleDateString('es-ES', opciones);
-    }
-    
-    actualizarFechaHora();
-    setInterval(actualizarFechaHora, 1000);
-  </script>
-</footer>
+    © 2025 Guía Cuphead - Todos los derechos reservados
+  </footer>
 </body>
 </html>

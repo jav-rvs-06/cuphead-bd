@@ -1,6 +1,5 @@
 <?php
 require_once 'config.php';
-session_start();
 header('Content-Type: application/json');
 
 if (!isset($_SESSION['usuario_id'])) {
@@ -15,18 +14,28 @@ $resultado = $stmt->get_result();
 $usuario = $resultado->fetch_assoc();
 $stmt->close();
 
-if (!$usuario || !in_array($usuario['rol'], ['admin_comunidad', 'superadmin'])) {
+if (!$usuario || !in_array($usuario['rol'], ['admin_comunidad', 'admin_comentarios', 'admin_records', 'superadmin'])) {
     echo json_encode(['success' => false, 'error' => 'No tienes permisos de administrador']);
     exit;
 }
 
-$query = "SELECT id, nombre_usuario, correo_electronico, rol, activo, fecha_creacion as fecha_registro
-          FROM usuarios 
-          ORDER BY fecha_creacion DESC";
+if ($usuario['rol'] === 'admin_comunidad') {
+    $query = "SELECT id, nombre_usuario, correo_electronico, rol, activo, fecha_creacion
+              FROM usuarios 
+              WHERE rol IN ('usuario', 'admin_comunidad')
+              ORDER BY fecha_creacion DESC";
+} else {
+    // superadmin ve todos los usuarios
+    $query = "SELECT id, nombre_usuario, correo_electronico, rol, activo, fecha_creacion
+              FROM usuarios 
+              ORDER BY fecha_creacion DESC";
+}
+
 $resultado = $conexion->query($query);
 
 $usuarios = [];
 while ($fila = $resultado->fetch_assoc()) {
+    $fila['fecha_registro'] = $fila['fecha_creacion'];
     $usuarios[] = $fila;
 }
 

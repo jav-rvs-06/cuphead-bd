@@ -31,7 +31,7 @@ if ($record_id <= 0 || !in_array($accion, ['aprobar', 'rechazar'])) {
 $nuevo_estado = ($accion === 'aprobar') ? 'aprobado' : 'rechazado';
 $verificador_id = $_SESSION['usuario_id'];
 
-$stmt = $conexion->prepare("UPDATE records SET estado = ?, verificador_id = ?, comentario_verificacion = ?, fecha_verificacion = NOW() WHERE id = ?");
+$stmt = $conexion->prepare("UPDATE records SET verificado = ?, verificador_id = ?, comentario_verificacion = ?, fecha_verificacion = NOW() WHERE id = ?");
 $stmt->bind_param("sisi", $nuevo_estado, $verificador_id, $comentario, $record_id);
 
 if ($stmt->execute()) {

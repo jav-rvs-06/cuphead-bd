@@ -49,7 +49,7 @@ if (!move_uploaded_file($_FILES['imagen_prueba']['tmp_name'], $ruta_completa)) {
     exit;
 }
 
-$stmt = $conexion->prepare("INSERT INTO records (usuario_id, jefe_nombre, categoria, valor, descripcion, imagen_prueba) VALUES (?, ?, ?, ?, ?, ?)");
+$stmt = $conexion->prepare("INSERT INTO records (usuario_id, jefe_nombre, categoria, valor, descripcion, imagen_prueba, verificado) VALUES (?, ?, ?, ?, ?, ?, 'pendiente')");
 $stmt->bind_param("isssss", $usuario_id, $jefe_nombre, $categoria, $valor, $descripcion, $ruta_bd);
 
 if ($stmt->execute()) {

@@ -29,10 +29,12 @@ CREATE TABLE records (
     valor VARCHAR(50) NOT NULL,
     descripcion TEXT,
     imagen_prueba VARCHAR(255) NOT NULL,
-    estado VARCHAR(20) DEFAULT 'pendiente',
+    -- Changed 'estado' to 'verificado' for consistency across all files
+    verificado VARCHAR(20) DEFAULT 'pendiente',
     verificador_id INT,
     comentario_verificacion TEXT,
-    fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    -- Changed 'fecha_creacion' to 'fecha_registro' for consistency
+    fecha_registro TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     fecha_verificacion TIMESTAMP NULL,
     FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE,
     FOREIGN KEY (verificador_id) REFERENCES usuarios(id) ON DELETE SET NULL
@@ -40,5 +42,6 @@ CREATE TABLE records (
 
 CREATE INDEX idx_pagina ON comentarios(pagina);
 CREATE INDEX idx_usuario ON comentarios(usuario_id);
-CREATE INDEX idx_estado ON records(estado);
+-- Updated index name to use 'verificado' column
+CREATE INDEX idx_verificado ON records(verificado);
 CREATE INDEX idx_usuario_records ON records(usuario_id);

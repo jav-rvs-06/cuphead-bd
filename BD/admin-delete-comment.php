@@ -1,6 +1,5 @@
 <?php
 require_once 'config.php';
-session_start();
 header('Content-Type: application/json');
 
 if (!isset($_SESSION['usuario_id'])) {
@@ -15,7 +14,7 @@ $resultado = $stmt->get_result();
 $usuario = $resultado->fetch_assoc();
 $stmt->close();
 
-if (!$usuario || !in_array($usuario['rol'], ['admin_comunidad', 'superadmin'])) {
+if (!$usuario || !in_array($usuario['rol'], ['admin_comunidad', 'admin_comentarios', 'superadmin'])) {
     echo json_encode(['success' => false, 'error' => 'No tienes permisos de administrador']);
     exit;
 }

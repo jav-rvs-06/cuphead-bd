@@ -1,4 +1,5 @@
 <?php
+session_start();
 require_once 'config.php';
 header('Content-Type: application/json');
 
@@ -20,7 +21,7 @@ if ($resultado->num_rows === 0) {
 }
 
 $usuario = $resultado->fetch_assoc();
-$is_admin = in_array($usuario['rol'], ['admin', 'superadmin']);
+$is_admin = in_array($usuario['rol'], ['admin', 'superadmin', 'admin_comunidad', 'admin_records', 'admin_comentarios']);
 
 echo json_encode([
     'is_admin' => $is_admin,

@@ -50,10 +50,21 @@ if ($result->num_rows === 1) {
         $_SESSION['nombre_usuario'] = $usuario['nombre_usuario'];
         $_SESSION['rol'] = $usuario['rol'] ?? 'usuario';
         
+        $redirectUrl = 'comunidad.html'; // Por defecto
+        
+        if ($_SESSION['rol'] === 'superadmin') {
+            $redirectUrl = 'superadmin.html';
+        } elseif ($_SESSION['rol'] === 'admin_records') {
+            $redirectUrl = 'admin-records.html';
+        } elseif (in_array($_SESSION['rol'], ['admin', 'admin_comentarios', 'admin_comunidad'])) {
+            $redirectUrl = 'admin.html';
+        }
+        
         echo json_encode([
             'success' => true, 
             'mensaje' => 'Inicio de sesión exitoso',
-            'rol' => $_SESSION['rol']
+            'rol' => $_SESSION['rol'],
+            'redirect' => $redirectUrl
         ]);
     } else {
         echo json_encode(['success' => false, 'error' => 'Contraseña incorrecta']);

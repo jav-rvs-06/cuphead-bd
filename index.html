@@ -173,6 +173,9 @@
       Si recién estas empezando en el mundo de Cuphead, prepárate para un viaje que te exigirá paciencia, habilidad y mucha perseverancia. Aquí no se trata solo de saltar y disparar; cada nivel y cada jefe tiene sus propios trucos, mecánicas y patrones únicos. lo que hace que cada batalla sea única y emocionante. Desde el primer momento, te darás cuenta de que este no es un juego que puedas completar en una historia de apuestas peligrosas, desafíos épicos y una lucha constante por recuperar sus almas. Si quieres conocer todos los secretos del juego, desde la historia hasta las mejores trucos para derrotar a cada jefe, entonces has llegado al lugar indicado. Cuphead es conocido por su nivel de dificultad elevado, y no hay duda de que cada jefe será un obstáculo formidable en tu camino. Pero no te preocupes, aquí encontrarás todas las estrategias y trucos que necesitas para salir victorioso de cada batalla. Cada derrota es una lección, y cada victoria es un logro digno de celebrarse.
      </p>
      <p class="text-content">
+      Así que, si estas listo para una de las experiencias mas emocionantes y exigentes de la historia de los videojuegos, no dudes en sumergirte y prepararte para enfrentar a cada uno de los desafíos que Cuphead, ¡seguro tu taza, carga tu pistola y prepárate para derrotar a cada jefe!
+     </p>
+     <p class="text-content">
       En esta guía, no solo te contaremos la historia detrás de Cuphead, sino que también te daremos los mejores consejos, trucos y estrategias para derrotar a los jefes más difíciles, encontrar los secretos escondidos de Inkwell Isle I, y por supuesto, disfrutar de cada uno de los momentos que hacen que este juego sea tan especial. Desde las cartas de encanto hasta los diferentes tipos de disparos, desde los habilidades adicionales, aquí tienes todo lo que necesitas para convertirte en un verdadero experto de Cuphead.
      </p>
      <div class="image-container">
@@ -398,22 +401,35 @@
       })
       .then(res => res.json())
       .then(data => {
+        console.log('[v0] Sesión verificada:', data); // Debug log
+        userLoggedIn = data.logueado;
+        userRole = data.rol || 'usuario';
+        const btn = document.getElementById('comunidadBtn');
+        if (data.logueado) {
+          if (userRole === 'superadmin') {
+            btn.textContent = 'Panel SuperAdmin';
+          } else if (userRole === 'admin_records') {
+            btn.textContent = 'Panel Admin Records';
+          } else if (userRole === 'admin' || userRole === 'admin_comentarios' || userRole === 'admin_comunidad') {
+            btn.textContent = 'Panel Admin';
+          } else {
+            btn.textContent = 'Ir a Comunidad';
+          }
+        } else {
+          btn.textContent = 'Comunidad';
+        }
         if (data.success) {
           loginMsg.textContent = '✓ ' + data.mensaje + ' Redirigiendo...';
           loginMsg.className = 'msg success';
           setTimeout(() => {
-            if (data.rol === 'admin') {
-              window.location.href = 'admin.html';
-            } else {
-              window.location.href = 'comunidad.html';
-            }
-          }, 1000);
+            window.location.href = data.redirect;
+          }, 1500);
         } else {
           loginMsg.textContent = '✗ ' + (data.error || 'Error al iniciar sesión');
           loginMsg.className = 'msg error';
         }
       })
-      .catch(() => {
+      .catch(err => {
         loginMsg.textContent = '✗ Error de conexión con el servidor';
         loginMsg.className = 'msg error';
       });
@@ -436,11 +452,16 @@
       fetch('BD/check-session.php')
         .then(res => res.json())
         .then(data => {
+          console.log('[v0] Sesión verificada:', data); // Debug log
           userLoggedIn = data.logueado;
           userRole = data.rol || 'usuario';
           const btn = document.getElementById('comunidadBtn');
           if (data.logueado) {
-            if (userRole === 'admin') {
+            if (userRole === 'superadmin') {
+              btn.textContent = 'Panel SuperAdmin';
+            } else if (userRole === 'admin_records') {
+              btn.textContent = 'Panel Admin Records';
+            } else if (userRole === 'admin' || userRole === 'admin_comentarios' || userRole === 'admin_comunidad') {
               btn.textContent = 'Panel Admin';
             } else {
               btn.textContent = 'Ir a Comunidad';
@@ -453,8 +474,13 @@
     }
 
     function handleComunidadClick() {
+      console.log('[v0] Botón comunidad clicked, rol:', userRole, 'logueado:', userLoggedIn); // Debug log
       if (userLoggedIn) {
-        if (userRole === 'admin') {
+        if (userRole === 'superadmin') {
+          window.location.href = 'superadmin.html';
+        } else if (userRole === 'admin_records') {
+          window.location.href = 'admin-records.html';
+        } else if (userRole === 'admin' || userRole === 'admin_comentarios' || userRole === 'admin_comunidad') {
           window.location.href = 'admin.html';
         } else {
           window.location.href = 'comunidad.html';

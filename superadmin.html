@@ -111,7 +111,10 @@
       </header>
 
       <div class="white-panel">
-        <button class="back-btn" onclick="goBack()">← Volver al Inicio</button>
+        <div style="display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap;">
+          <button class="back-btn" onclick="goBack()">← Volver al Inicio</button>
+          <button class="back-btn" onclick="cerrarSesion()" style="background: #fff; color: #8B4513;">Cerrar sesión</button>
+        </div>
 
         <h1 class="admin-title">
           Panel SuperAdmin
@@ -324,6 +327,12 @@
 
       function goToHome() { window.location.href = 'index.html'; }
       function goBack() { window.location.href = 'index.html'; }
+
+      function cerrarSesion() {
+        if (confirm('¿Estás seguro que deseas cerrar sesión?')) {
+          window.location.href = 'BD/logout.php';
+        }
+      }
 
       checkSuperAdminAccess();
     </script>

@@ -10,7 +10,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (empty($nombre_usuario) || empty($contrasena)) {
         $error = 'El nombre de usuario y contraseña son obligatorios.';
     } else {
-        $stmt = $conexion->prepare("SELECT id, nombre_usuario, contrasena FROM usuarios WHERE nombre_usuario = ?");
+        $stmt = $conexion->prepare("SELECT id, nombre_usuario, contrasena, rol FROM usuarios WHERE nombre_usuario = ?");
         $stmt->bind_param("s", $nombre_usuario);
         $stmt->execute();
         $result = $stmt->get_result();
@@ -20,7 +20,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if (password_verify($contrasena, $usuario['contrasena'])) {
                 $_SESSION['usuario_id'] = $usuario['id'];
                 $_SESSION['nombre_usuario'] = $usuario['nombre_usuario'];
-                header('Location: ../index.html');
+                $_SESSION['rol'] = $usuario['rol']; // Esto es crítico
+                
+                if ($usuario['rol'] === 'superadmin') {
+                    header('Location: superadmin.html');
+                } elseif ($usuario['rol'] === 'admin') {
+                    header('Location: admin.html');
+                } else {
+                    header('Location: index.html');
+                }
                 exit();
             } else {
                 $error = 'Contraseña incorrecta.';

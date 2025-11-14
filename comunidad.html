@@ -604,6 +604,7 @@
     }
 
     function loadRecords() {
+      console.log('[v0] loadRecords iniciado');
       const jefeFilter = document.getElementById('recordJefeFilter').value;
       const categoriaFilter = document.getElementById('recordCategoriaFilter').value;
       
@@ -611,17 +612,30 @@
       if (jefeFilter) url += 'jefe=' + encodeURIComponent(jefeFilter) + '&';
       if (categoriaFilter) url += 'categoria=' + encodeURIComponent(categoriaFilter);
       
+      console.log('[v0] URL de solicitud:', url);
+      console.log('[v0] Filtros aplicados - Jefe:', jefeFilter, 'Categoría:', categoriaFilter);
+      
       fetch(url)
-        .then(res => res.json())
+        .then(res => {
+          console.log('[v0] Respuesta recibida, status:', res.status);
+          return res.json();
+        })
         .then(data => {
+          console.log('[v0] Datos recibidos:', data);
+          console.log('[v0] Cantidad de records:', data.records ? data.records.length : 0);
+          
           const list = document.getElementById('recordsList');
           
           if (!data.records || data.records.length === 0) {
+            console.log('[v0] No hay records para mostrar');
             list.innerHTML = '<p style="text-align: center; color: #999;">No hay récords en esta categoría. ¡Sé el primero!</p>';
             return;
           }
 
+          console.log('[v0] Renderizando', data.records.length, 'records');
+          
           list.innerHTML = data.records.map(r => {
+            console.log('[v0] Record individual:', r);
             const estadoBadge = `<span class="record-badge badge-${r.estado}">${r.estado.toUpperCase()}</span>`;
             const isVerificador = (userRole === 'admin_verificador' || userRole === 'superadmin');
             const verifyButtons = (r.estado === 'pendiente' && isVerificador) ? `
@@ -664,8 +678,11 @@
               </div>
             `;
           }).join('');
+          
+          console.log('[v0] Renderizado completado');
         })
         .catch(err => {
+          console.error('[v0] Error al cargar récords:', err);
           document.getElementById('recordsList').innerHTML = '<p style="color: #d32f2f;">Error al cargar récords</p>';
         });
     }

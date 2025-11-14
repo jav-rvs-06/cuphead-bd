@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>Panel Admin Records - Cuphead</title>
+  <link href="cuphead-seeklogo.ico" rel="icon" type="image/png"/>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #ffcf0f;
+      line-height: 1.6;
+      margin: 0;
+      padding: 20px;
+      color: #000;
+    }
+    
+    .container { max-width: 100%; margin: 0 auto; }
+    
+    .header-section {
+      position: relative; display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 20px; padding: 0 40px; min-height: 120px;
+    }
+    
+    .logo-section { display: flex; flex-direction: column; align-items: flex-start; z-index: 2; }
+    
+    .cuphead-logo-img { max-height: 100px; max-width: 300px; width: auto; height: auto; object-fit: contain; }
+    
+    .main-title-btn {
+      position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
+      font-size: 72px; font-weight: bold; color: white;
+      text-shadow: 4px 4px 0px #000, -2px -2px 0px #000, 2px -2px 0px #000, -2px 2px 0px #000;
+      background: none; border: none; cursor: pointer; padding: 0; white-space: nowrap; z-index: 1;
+    }
+    
+    .characters { max-height: 120px; max-width: 150px; width: auto; height: auto; object-fit: contain; z-index: 2; }
+    
+    .white-panel {
+      background: white; border-radius: 30px; padding: 30px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+      width: 100%; max-width: 1400px; margin: 0 auto;
+    }
+    
+    .back-btn {
+      background: linear-gradient(45deg, #FFD700, #FFA500);
+      color: #8B4513; border: 2px solid #8B4513;
+      padding: 10px 20px; border-radius: 20px; cursor: pointer;
+      font-size: 14px; font-weight: bold; margin-bottom: 20px;
+      transition: all 0.3s;
+    }
+    
+    .back-btn:hover { transform: translateY(-2px); box-shadow: 0 4px 8px rgba(0,0,0,0.2); }
+    
+    .admin-title {
+      font-size: 28px; font-weight: bold; text-align: center;
+      margin: 20px 0; color: #8B4513; text-transform: uppercase;
+    }
+    
+    #accessDenied {
+      display: none; text-align: center; padding: 50px;
+    }
+    
+    #accessDenied h2 { color: #8B4513; font-size: 24px; margin-bottom: 15px; }
+    
+    #adminPanel { display: none; }
+    
+    /* Estilos para pestañas */
+    .tabs-container {
+      display: flex; gap: 10px; margin-bottom: 20px; border-bottom: 3px solid #8B4513;
+    }
+    
+    .tab-button {
+      padding: 12px 30px; background: #f0f0f0; border: none;
+      border-radius: 10px 10px 0 0; cursor: pointer; font-size: 16px;
+      font-weight: bold; color: #8B4513; transition: all 0.3s;
+    }
+    
+    .tab-button:hover { background: #e0e0e0; }
+    
+    .tab-button.active {
+      background: #8B4513; color: white;
+    }
+    
+    .tab-content {
+      display: none;
+    }
+    
+    .tab-content.active {
+      display: block;
+    }
+    
+    .section-title {
+      font-size: 22px; margin-bottom: 20px; color: #8B4513;
+      border-bottom: 2px solid #8B4513; padding-bottom: 10px; font-weight: bold;
+    }
+    
+    .stats-container {
+      display: flex; gap: 20px; margin-bottom: 20px; flex-wrap: wrap;
+    }
+    
+    .stat-card {
+      flex: 1; min-width: 200px; padding: 20px; border-radius: 15px;
+      background: linear-gradient(135deg, #FFD700, #FFA500);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+    
+    .stat-number {
+      font-size: 32px; font-weight: bold; color: #8B4513;
+    }
+    
+    .stat-label {
+      font-size: 14px; color: #8B4513; margin-top: 5px;
+    }
+    
+    table {
+      width: 100%; border-collapse: collapse; margin-top: 20px;
+      background: white; border-radius: 10px; overflow: hidden;
+    }
+    
+    th, td {
+      padding: 12px; text-align: left; border-bottom: 1px solid #ddd;
+    }
+    
+    th {
+      background: #8B4513; color: white; font-weight: bold;
+    }
+    
+    tr:hover { background: #f8f9fa; }
+    
+    .btn {
+      padding: 8px 15px; border: none; border-radius: 15px;
+      cursor: pointer; font-size: 13px; font-weight: bold;
+      transition: all 0.3s; margin: 0 5px;
+    }
+    
+    .btn-success {
+      background: #27ae60; color: white;
+    }
+    
+    .btn-success:hover {
+      background: #229954; transform: translateY(-1px);
+    }
+    
+    .btn-danger {
+      background: #e74c3c; color: white;
+    }
+    
+    .btn-danger:hover {
+      background: #c0392b; transform: translateY(-1px);
+    }
+    
+    .status-badge {
+      padding: 5px 10px; border-radius: 10px;
+      font-size: 12px; font-weight: bold; display: inline-block;
+    }
+    
+    .status-pending {
+      background: #f39c12; color: white;
+    }
+    
+    .status-approved {
+      background: #27ae60; color: white;
+    }
+    
+    .status-rejected {
+      background: #e74c3c; color: white;
+    }
+    
+    .message {
+      padding: 15px; border-radius: 10px; margin-bottom: 20px;
+      display: none; font-weight: bold;
+    }
+    
+    .message.success {
+      background: #d4edda; color: #155724; border: 2px solid #c3e6cb;
+    }
+    
+    .message.error {
+      background: #f8d7da; color: #721c24; border: 2px solid #f5c6cb;
+    }
+    
+    .loading {
+      text-align: center; padding: 30px; font-size: 18px;
+      color: #8B4513; font-weight: bold;
+    }
+    
+    .empty-state {
+      text-align: center; padding: 50px; color: #8B4513;
+    }
+    
+    .empty-state img {
+      max-width: 200px; opacity: 0.5; margin-bottom: 20px;
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <div class="container">
+      <header class="header-section">
+        <div class="logo-section">
+          <img alt="Cuphead Logo" class="cuphead-logo-img" src="_img/CupheadLogo.png"/>
+        </div>
+        <button aria-label="Ir al inicio" class="main-title-btn" onclick="goToHome()">
+          LA GUÍA DEFINITIVA
+        </button>
+        <img alt="Cuphead Characters" class="characters" src="_img/CupheadPersonajes.png"/>
+      </header>
+
+      <div class="white-panel">
+        <div style="display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap;">
+          <button class="back-btn" onclick="goBack()">← Volver al Inicio</button>
+          <button class="back-btn" onclick="cerrarSesion()" style="background: #fff; color: #8B4513;">Cerrar sesión</button>
+        </div>
+
+        <h1 class="admin-title">Panel de Verificación de Records</h1>
+
+        <div id="accessDenied">
+          <h2>Acceso Denegado</h2>
+          <p>No tienes permisos para acceder a esta página.</p>
+          <button class="btn btn-danger" onclick="goBack()" style="margin-top: 20px;">Volver al Inicio</button>
+        </div>
+
+        <div id="adminPanel">
+          <div id="recordsMessage" class="message"></div>
+          
+          <!-- Estadísticas generales -->
+          <div class="stats-container">
+            <div class="stat-card">
+              <div class="stat-number" id="statPendientes">0</div>
+              <div class="stat-label">Pendientes</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-number" id="statAprobados">0</div>
+              <div class="stat-label">Aprobados</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-number" id="statRechazados">0</div>
+              <div class="stat-label">Rechazados</div>
+            </div>
+          </div>
+
+          <!-- Sistema de pestañas -->
+          <div class="tabs-container">
+            <button class="tab-button active" onclick="switchTab('pendientes')">
+              📋 Records Pendientes
+            </button>
+            <button class="tab-button" onclick="switchTab('aprobados')">
+              ✅ Records Aprobados
+            </button>
+            <button class="tab-button" onclick="switchTab('rechazados')">
+              ❌ Records Rechazados
+            </button>
+          </div>
+
+          <!-- Contenido de pestañas -->
+          <div id="tab-pendientes" class="tab-content active">
+            <h2 class="section-title">Records Pendientes de Verificación</h2>
+            <div id="pendientesLoading" class="loading">Cargando records pendientes...</div>
+            <div id="pendientesTable"></div>
+          </div>
+
+          <div id="tab-aprobados" class="tab-content">
+            <h2 class="section-title">Records Aprobados</h2>
+            <div id="aprobadosLoading" class="loading">Cargando records aprobados...</div>
+            <div id="aprobadosTable"></div>
+          </div>
+
+          <div id="tab-rechazados" class="tab-content">
+            <h2 class="section-title">Records Rechazados</h2>
+            <div id="rechazadosLoading" class="loading">Cargando records rechazados...</div>
+            <div id="rechazadosTable"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      let currentTab = 'pendientes';
+
+      function checkAdminAccess() {
+        fetch('BD/admin-check.php')
+          .then(res => res.json())
+          .then(data => {
+            if (data.is_admin && (data.rol === 'admin_records' || data.rol === 'superadmin')) {
+              document.getElementById('adminPanel').style.display = 'block';
+              loadAllRecords();
+            } else {
+              document.getElementById('accessDenied').style.display = 'block';
+            }
+          })
+          .catch(() => {
+            document.getElementById('accessDenied').style.display = 'block';
+          });
+      }
+
+      function switchTab(tab) {
+        currentTab = tab;
+        
+        // Actualizar botones
+        document.querySelectorAll('.tab-button').forEach(btn => {
+          btn.classList.remove('active');
+        });
+        event.target.classList.add('active');
+        
+        // Actualizar contenido
+        document.querySelectorAll('.tab-content').forEach(content => {
+          content.classList.remove('active');
+        });
+        document.getElementById(`tab-${tab}`).classList.add('active');
+        
+        // Cargar datos si no se han cargado
+        loadRecordsByStatus(tab);
+      }
+
+      function loadAllRecords() {
+        fetch('BD/admin-get-records.php?estado=todos')
+          .then(res => res.json())
+          .then(data => {
+            console.log('[v0] Records data received:', data);
+            
+            if (data.success) {
+              updateStats(data.records);
+              loadRecordsByStatus('pendientes');
+            } else {
+              showMessage('recordsMessage', data.error || 'Error al cargar records', 'error');
+            }
+          })
+          .catch(err => {
+            console.error('[v0] Error loading all records:', err);
+            showMessage('recordsMessage', 'Error del servidor: ' + err.message, 'error');
+          });
+      }
+
+      function updateStats(records) {
+        const pendientes = records.filter(r => r.verificado === 'pendiente').length;
+        const aprobados = records.filter(r => r.verificado === 'aprobado').length;
+        const rechazados = records.filter(r => r.verificado === 'rechazado').length;
+        
+        console.log('[v0] Stats calculated:', { pendientes, aprobados, rechazados });
+        
+        document.getElementById('statPendientes').textContent = pendientes;
+        document.getElementById('statAprobados').textContent = aprobados;
+        document.getElementById('statRechazados').textContent = rechazados;
+      }
+
+      function loadRecordsByStatus(estado) {
+        const loadingId = `${estado}Loading`;
+        const tableId = `${estado}Table`;
+        
+        console.log('[v0] Loading records for status:', estado);
+        
+        document.getElementById(loadingId).style.display = 'block';
+        document.getElementById(tableId).innerHTML = '';
+
+        const estadoDb = estado === 'pendientes' ? 'pendiente' : 
+                        estado === 'aprobados' ? 'aprobado' : 
+                        estado === 'rechazados' ? 'rechazado' : estado;
+
+        fetch(`BD/admin-get-records.php?estado=${estadoDb}`)
+          .then(res => res.json())
+          .then(data => {
+            console.log('[v0] Records received for', estado, ':', data);
+            console.log('[v0] Number of records:', data.records ? data.records.length : 0);
+            console.log('[v0] First record structure:', data.records && data.records[0] ? data.records[0] : 'No records');
+            
+            document.getElementById(loadingId).style.display = 'none';
+
+            if (!data.success) {
+              showMessage('recordsMessage', data.error, 'error');
+              return;
+            }
+
+            if (data.records.length === 0) {
+              document.getElementById(tableId).innerHTML = 
+                `<div class="empty-state">
+                  <p style="font-size: 18px;">No hay records ${estado} en este momento.</p>
+                </div>`;
+              return;
+            }
+
+            let table = '<table><thead><tr>';
+            table += '<th>ID</th><th>Usuario</th><th>Jefe</th><th>Categoría</th><th>Valor/Tiempo</th><th>Descripción</th><th>Imagen</th><th>Estado</th><th>Fecha</th>';
+            
+            if (estado === 'pendientes') {
+              table += '<th>Acciones</th>';
+            }
+            
+            table += '</tr></thead><tbody>';
+
+            data.records.forEach(record => {
+              console.log('[v0] Processing record:', record);
+              
+              const statusClass = record.verificado === 'pendiente' ? 'status-pending' : 
+                                 record.verificado === 'aprobado' ? 'status-approved' : 'status-rejected';
+              const statusText = record.verificado === 'pendiente' ? 'PENDIENTE' : 
+                                record.verificado === 'aprobado' ? 'APROBADO' : 'RECHAZADO';
+              
+              const statusBadge = `<span class="status-badge ${statusClass}">${statusText}</span>`;
+
+              const imagenLink = record.imagen_prueba ? 
+                `<a href="${record.imagen_prueba}" target="_blank" style="color: #8B4513; font-weight: bold;">Ver imagen</a>` : 
+                'Sin imagen';
+
+              let acciones = '';
+              if (estado === 'pendientes') {
+                acciones = `<td>
+                  <button class="btn btn-success" onclick="verifyRecord(${record.id}, 'aprobado')">✓ Aprobar</button>
+                  <button class="btn btn-danger" onclick="verifyRecord(${record.id}, 'rechazado')">✗ Rechazar</button>
+                </td>`;
+              }
+
+              table += `<tr>
+                <td>${record.id || 'N/A'}</td>
+                <td>${record.nombre_usuario || 'Desconocido'}</td>
+                <td>${record.jefe_nombre || 'N/A'}</td>
+                <td>${record.categoria || 'N/A'}</td>
+                <td>${record.valor || 'N/A'}</td>
+                <td>${record.descripcion || 'Sin descripción'}</td>
+                <td>${imagenLink}</td>
+                <td>${statusBadge}</td>
+                <td>${record.fecha_registro ? new Date(record.fecha_registro).toLocaleDateString('es-ES') : 'N/A'}</td>
+                ${acciones}
+              </tr>`;
+            });
+
+            table += '</tbody></table>';
+            console.log('[v0] Table HTML generated, inserting into DOM');
+            document.getElementById(tableId).innerHTML = table;
+          })
+          .catch(err => {
+            console.error('[v0] Error loading records:', err);
+            document.getElementById(loadingId).style.display = 'none';
+            showMessage('recordsMessage', 'Error al cargar records: ' + err.message, 'error');
+          });
+      }
+
+      function verifyRecord(recordId, estado) {
+        const mensaje = estado === 'aprobado' ? '¿Aprobar este record?' : '¿Rechazar este record?';
+        
+        if (!confirm(mensaje)) {
+          return;
+        }
+
+        const formData = new FormData();
+        formData.append('record_id', recordId);
+        formData.append('estado', estado);
+
+        fetch('BD/admin-verify-record.php', {
+          method: 'POST',
+          body: formData
+        })
+        .then(res => res.json())
+        .then(data => {
+          if (data.success) {
+            showMessage('recordsMessage', data.mensaje, 'success');
+            loadAllRecords();
+          } else {
+            showMessage('recordsMessage', data.error, 'error');
+          }
+        })
+        .catch(() => {
+          showMessage('recordsMessage', 'Error al verificar record', 'error');
+        });
+      }
+
+      function showMessage(elementId, message, type) {
+        const msgElement = document.getElementById(elementId);
+        msgElement.textContent = message;
+        msgElement.className = `message ${type}`;
+        msgElement.style.display = 'block';
+
+        setTimeout(() => {
+          msgElement.style.display = 'none';
+        }, 5000);
+      }
+
+      function goToHome() { window.location.href = 'index.html'; }
+      function goBack() { window.location.href = 'index.html'; }
+
+      function cerrarSesion() {
+        if (confirm('¿Estás seguro que deseas cerrar sesión?')) {
+          window.location.href = 'BD/logout.php';
+        }
+      }
+
+      checkAdminAccess();
+    </script>
+  </main>
+
+  <footer style="text-align: center; margin-top: 40px; padding: 20px; color: #8B4513;">
+    © 2025 Guía Cuphead - Todos los derechos reservados
+  </footer>
+</body>
+</html>
