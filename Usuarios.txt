@@ -1,0 +1,5 @@
+admin_comunidad@cuphead.com
+admin_records@cuphead.com
+superadmin@cuphead.com
+usuario@cuphead.com
+Contraseñas: 123456
