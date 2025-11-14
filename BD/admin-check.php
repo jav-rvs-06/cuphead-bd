@@ -20,10 +20,11 @@ if ($resultado->num_rows === 0) {
 }
 
 $usuario = $resultado->fetch_assoc();
-$is_admin = ($usuario['rol'] === 'admin');
+$is_admin = in_array($usuario['rol'], ['admin', 'superadmin']);
 
 echo json_encode([
     'is_admin' => $is_admin,
     'rol' => $usuario['rol']
 ]);
+$stmt->close();
 ?>

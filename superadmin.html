@@ -77,8 +77,8 @@
     .status-active { background: #27ae60; color: white; }
     .status-inactive { background: #e74c3c; color: white; }
     .role-usuario { background: #95a5a6; color: white; }
-    .role-admin_moderador { background: #3498db; color: white; }
-    .role-admin_verificador { background: #9b59b6; color: white; }
+    .role-admin_comunidad { background: #3498db; color: white; }
+    .role-admin_records { background: #9b59b6; color: white; }
     .role-superadmin-badge { background: #e74c3c; color: white; }
     .message {
       padding: 15px; border-radius: 10px; margin-bottom: 20px;
@@ -132,8 +132,8 @@
             Asigna roles específicos a los usuarios. Los administradores tendrán permisos según su rol:
           </p>
           <ul style="margin-bottom: 30px; color: #666; line-height: 2;">
-            <li><strong style="color: #3498db;">Admin Moderador:</strong> Gestiona usuarios y comentarios</li>
-            <li><strong style="color: #9b59b6;">Admin Verificador:</strong> Verifica y aprueba récords enviados por usuarios</li>
+            <li><strong style="color: #3498db;">Admin Comunidad:</strong> Gestiona usuarios y puede eliminar comentarios</li>
+            <li><strong style="color: #9b59b6;">Admin Records:</strong> Verifica y aprueba récords enviados por usuarios</li>
             <li><strong style="color: #e74c3c;">SuperAdmin:</strong> Control total (no modificable)</li>
           </ul>
 
@@ -192,13 +192,13 @@
                   roleBadgeClass = 'role-usuario';
                   roleText = 'Usuario';
                   break;
-                case 'admin_moderador':
-                  roleBadgeClass = 'role-admin_moderador';
-                  roleText = 'Admin Moderador';
+                case 'admin_comunidad':
+                  roleBadgeClass = 'role-admin_comunidad';
+                  roleText = 'Admin Comunidad';
                   break;
-                case 'admin_verificador':
-                  roleBadgeClass = 'role-admin_verificador';
-                  roleText = 'Admin Verificador';
+                case 'admin_records':
+                  roleBadgeClass = 'role-admin_records';
+                  roleText = 'Admin Records';
                   break;
                 case 'superadmin':
                   roleBadgeClass = 'role-superadmin-badge';
@@ -218,8 +218,8 @@
                 roleSelector = `
                   <select class="role-select" id="role-${user.id}" onchange="changeUserRole(${user.id})">
                     <option value="usuario" ${user.rol === 'usuario' ? 'selected' : ''}>Usuario</option>
-                    <option value="admin_moderador" ${user.rol === 'admin_moderador' ? 'selected' : ''}>Admin Moderador</option>
-                    <option value="admin_verificador" ${user.rol === 'admin_verificador' ? 'selected' : ''}>Admin Verificador</option>
+                    <option value="admin_comunidad" ${user.rol === 'admin_comunidad' ? 'selected' : ''}>Admin Comunidad</option>
+                    <option value="admin_records" ${user.rol === 'admin_records' ? 'selected' : ''}>Admin Records</option>
                   </select>
                 `;
                 
@@ -256,7 +256,7 @@
         const newRole = document.getElementById(`role-${userId}`).value;
         
         if (!confirm(`¿Cambiar el rol de este usuario a "${newRole}"?`)) {
-          loadAllUsers(); // Recargar para restaurar el valor original
+          loadAllUsers();
           return;
         }
 

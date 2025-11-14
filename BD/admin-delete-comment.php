@@ -1,5 +1,6 @@
 <?php
 require_once 'config.php';
+session_start();
 header('Content-Type: application/json');
 
 if (!isset($_SESSION['usuario_id'])) {
@@ -12,13 +13,13 @@ $stmt->bind_param("i", $_SESSION['usuario_id']);
 $stmt->execute();
 $resultado = $stmt->get_result();
 $usuario = $resultado->fetch_assoc();
+$stmt->close();
 
-if (!$usuario || $usuario['rol'] !== 'admin') {
+if (!$usuario || !in_array($usuario['rol'], ['admin_comunidad', 'superadmin'])) {
     echo json_encode(['success' => false, 'error' => 'No tienes permisos de administrador']);
     exit;
 }
 
-// Obtener ID del comentario
 $comentario_id = $_POST['comentario_id'] ?? 0;
 
 if ($comentario_id <= 0) {
@@ -26,7 +27,6 @@ if ($comentario_id <= 0) {
     exit;
 }
 
-// Eliminar comentario
 $stmt = $conexion->prepare("DELETE FROM comentarios WHERE id = ?");
 $stmt->bind_param("i", $comentario_id);
 
@@ -35,4 +35,5 @@ if ($stmt->execute()) {
 } else {
     echo json_encode(['success' => false, 'error' => 'Error al eliminar el comentario']);
 }
+$stmt->close();
 ?>

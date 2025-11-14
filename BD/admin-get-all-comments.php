@@ -1,5 +1,6 @@
 <?php
 require_once 'config.php';
+session_start();
 header('Content-Type: application/json');
 
 if (!isset($_SESSION['usuario_id'])) {
@@ -12,13 +13,13 @@ $stmt->bind_param("i", $_SESSION['usuario_id']);
 $stmt->execute();
 $resultado = $stmt->get_result();
 $usuario = $resultado->fetch_assoc();
+$stmt->close();
 
-if (!$usuario || $usuario['rol'] !== 'admin') {
+if (!$usuario || !in_array($usuario['rol'], ['admin_comunidad', 'superadmin'])) {
     echo json_encode(['success' => false, 'error' => 'No tienes permisos de administrador']);
     exit;
 }
 
-// Obtener todos los comentarios con información del usuario
 $query = "SELECT c.id, c.titulo, c.contenido, c.fecha_comentario, c.pagina, 
                  u.nombre_usuario, u.correo_electronico 
           FROM comentarios c 

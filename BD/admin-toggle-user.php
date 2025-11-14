@@ -1,8 +1,8 @@
 <?php
 require_once 'config.php';
+session_start();
 header('Content-Type: application/json');
 
-// Verificar que sea administrador
 if (!isset($_SESSION['usuario_id'])) {
     echo json_encode(['success' => false, 'error' => 'No autorizado']);
     exit;
@@ -13,13 +13,13 @@ $stmt->bind_param("i", $_SESSION['usuario_id']);
 $stmt->execute();
 $resultado = $stmt->get_result();
 $usuario = $resultado->fetch_assoc();
+$stmt->close();
 
-if (!$usuario || $usuario['rol'] !== 'admin') {
+if (!$usuario || $usuario['rol'] !== 'superadmin') {
     echo json_encode(['success' => false, 'error' => 'No tienes permisos de administrador']);
     exit;
 }
 
-// Obtener datos
 $usuario_id = $_POST['usuario_id'] ?? 0;
 $nuevo_estado = $_POST['activo'] ?? 1;
 
@@ -28,13 +28,11 @@ if ($usuario_id <= 0) {
     exit;
 }
 
-// No permitir desactivar al propio admin
 if ($usuario_id == $_SESSION['usuario_id']) {
     echo json_encode(['success' => false, 'error' => 'No puedes desactivarte a ti mismo']);
     exit;
 }
 
-// Actualizar estado del usuario
 $stmt = $conexion->prepare("UPDATE usuarios SET activo = ? WHERE id = ?");
 $stmt->bind_param("ii", $nuevo_estado, $usuario_id);
 
@@ -44,4 +42,5 @@ if ($stmt->execute()) {
 } else {
     echo json_encode(['success' => false, 'error' => 'Error al actualizar el usuario']);
 }
+$stmt->close();
 ?>

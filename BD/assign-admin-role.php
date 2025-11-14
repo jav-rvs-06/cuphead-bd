@@ -1,5 +1,6 @@
 <?php
 require_once 'config.php';
+session_start();
 header('Content-Type: application/json');
 
 // Verificar que el usuario sea superadmin
@@ -19,7 +20,7 @@ if (empty($usuario_id) || empty($nuevo_rol)) {
 }
 
 // Validar roles permitidos
-$roles_permitidos = ['usuario', 'admin_moderador', 'admin_verificador'];
+$roles_permitidos = ['usuario', 'admin_comunidad', 'admin_records'];
 if (!in_array($nuevo_rol, $roles_permitidos)) {
     echo json_encode(['success' => false, 'error' => 'Rol inválido']);
     exit;
@@ -46,4 +47,5 @@ if ($stmt->execute()) {
 } else {
     echo json_encode(['success' => false, 'error' => 'Error al actualizar el rol']);
 }
+$stmt->close();
 ?>

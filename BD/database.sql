@@ -6,7 +6,9 @@ CREATE TABLE usuarios (
     nombre_usuario VARCHAR(50) UNIQUE NOT NULL,
     correo_electronico VARCHAR(100) UNIQUE NOT NULL,
     contrasena VARCHAR(255) NOT NULL,
-    fecha_registro TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    rol VARCHAR(20) DEFAULT 'usuario' NOT NULL,
+    activo TINYINT DEFAULT 1,
+    fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE comentarios (
@@ -19,5 +21,24 @@ CREATE TABLE comentarios (
     FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE
 );
 
+CREATE TABLE records (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    usuario_id INT NOT NULL,
+    jefe_nombre VARCHAR(100) NOT NULL,
+    categoria VARCHAR(50) NOT NULL,
+    valor VARCHAR(50) NOT NULL,
+    descripcion TEXT,
+    imagen_prueba VARCHAR(255) NOT NULL,
+    estado VARCHAR(20) DEFAULT 'pendiente',
+    verificador_id INT,
+    comentario_verificacion TEXT,
+    fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    fecha_verificacion TIMESTAMP NULL,
+    FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE,
+    FOREIGN KEY (verificador_id) REFERENCES usuarios(id) ON DELETE SET NULL
+);
+
 CREATE INDEX idx_pagina ON comentarios(pagina);
 CREATE INDEX idx_usuario ON comentarios(usuario_id);
+CREATE INDEX idx_estado ON records(estado);
+CREATE INDEX idx_usuario_records ON records(usuario_id);
