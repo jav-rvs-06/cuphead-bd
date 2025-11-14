@@ -263,6 +263,8 @@
           return;
         }
 
+        console.log('[v0] Changing role - userId:', userId, 'newRole:', newRole);
+
         const formData = new FormData();
         formData.append('usuario_id', userId);
         formData.append('rol', newRole);
@@ -271,18 +273,23 @@
           method: 'POST',
           body: formData
         })
-        .then(res => res.json())
+        .then(res => {
+          console.log('[v0] Response status:', res.status);
+          return res.json();
+        })
         .then(data => {
+          console.log('[v0] Response data:', data);
           if (data.success) {
             showMessage(data.mensaje, 'success');
             loadAllUsers();
           } else {
-            showMessage(data.error, 'error');
+            showMessage(data.error || 'Error desconocido', 'error');
             loadAllUsers();
           }
         })
-        .catch(() => {
-          showMessage('Error al actualizar rol', 'error');
+        .catch(err => {
+          console.error('[v0] Fetch error:', err);
+          showMessage('Error al actualizar rol: ' + err.message, 'error');
           loadAllUsers();
         });
       }

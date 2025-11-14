@@ -330,19 +330,28 @@
                 `<button class="btn btn-warning" onclick="toggleUser(${user.id}, 0)">Deshabilitar</button>` : 
                 `<button class="btn btn-success" onclick="toggleUser(${user.id}, 1)">Habilitar</button>`;
 
-              const isSuperadmin = user.rol === 'superadmin';
-              const roleDisplay = isSuperadmin ? 
-                '<span class="status-badge status-admin">SUPERADMIN</span>' : 
-                `<select id="role-${user.id}" style="padding: 8px; border-radius: 5px; border: 2px solid #8B4513; cursor: pointer;">
-                  <option value="usuario" ${user.rol === 'usuario' ? 'selected' : ''}>Usuario Normal</option>
-                  <option value="admin_comentarios" ${user.rol === 'admin_comentarios' ? 'selected' : ''}>Admin Comentarios</option>
-                  <option value="admin_records" ${user.rol === 'admin_records' ? 'selected' : ''}>Admin Records</option>
-                  <option value="admin_comunidad" ${user.rol === 'admin_comunidad' ? 'selected' : ''}>Admin Comunidad</option>
-                </select>`;
-
-              const roleActions = isSuperadmin ? 
-                '<span style="color: #999; font-style: italic;">Protegido</span>' : 
-                `<button class="btn btn-warning" onclick="updateRole(${user.id}, document.getElementById('role-${user.id}').value)">Actualizar Rol</button>`;
+              let roleDisplay = '';
+              let roleActions = '';
+              
+              switch(user.rol) {
+                case 'usuario':
+                  roleDisplay = '<span class="status-badge">Usuario</span>';
+                  break;
+                case 'admin_comentarios':
+                  roleDisplay = '<span class="status-badge status-admin">Admin Comentarios</span>';
+                  break;
+                case 'admin_records':
+                  roleDisplay = '<span class="status-badge status-admin">Admin Records</span>';
+                  break;
+                case 'admin_comunidad':
+                  roleDisplay = '<span class="status-badge status-admin">Admin Comunidad</span>';
+                  break;
+                case 'superadmin':
+                  roleDisplay = '<span class="status-badge status-admin">SUPERADMIN</span>';
+                  break;
+              }
+              
+              roleActions = '<span style="color: #999; font-size: 12px;">Roles gestionados por SuperAdmin</span>';
 
               table += `<tr>
                 <td>${user.id}</td>

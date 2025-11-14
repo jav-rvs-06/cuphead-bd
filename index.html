@@ -399,37 +399,51 @@
         method: 'POST',
         body: formData
       })
-      .then(res => res.json())
-      .then(data => {
-        console.log('[v0] Sesión verificada:', data); // Debug log
-        userLoggedIn = data.logueado;
-        userRole = data.rol || 'usuario';
-        const btn = document.getElementById('comunidadBtn');
-        if (data.logueado) {
-          if (userRole === 'superadmin') {
-            btn.textContent = 'Panel SuperAdmin';
-          } else if (userRole === 'admin_records') {
-            btn.textContent = 'Panel Admin Records';
-          } else if (userRole === 'admin' || userRole === 'admin_comentarios' || userRole === 'admin_comunidad') {
-            btn.textContent = 'Panel Admin';
+      .then(res => {
+        console.log('[v0] Response status:', res.status); // Add response status debug
+        console.log('[v0] Response headers:', res.headers.get('content-type')); // Check content type
+        return res.text(); // Get text first to see raw response
+      })
+      .then(text => {
+        console.log('[v0] Raw response:', text); // Log raw response
+        try {
+          const data = JSON.parse(text);
+          console.log('[v0] Parsed JSON data:', data); // Log parsed data
+          
+          userLoggedIn = data.logueado;
+          userRole = data.rol || 'usuario';
+          const btn = document.getElementById('comunidadBtn');
+          if (data.logueado) {
+            if (userRole === 'superadmin') {
+              btn.textContent = 'Panel SuperAdmin';
+            } else if (userRole === 'admin_records') {
+              btn.textContent = 'Panel Admin Records';
+            } else if (userRole === 'admin' || userRole === 'admin_comentarios' || userRole === 'admin_comunidad') {
+              btn.textContent = 'Panel Admin';
+            } else {
+              btn.textContent = 'Ir a Comunidad';
+            }
           } else {
-            btn.textContent = 'Ir a Comunidad';
+            btn.textContent = 'Comunidad';
           }
-        } else {
-          btn.textContent = 'Comunidad';
-        }
-        if (data.success) {
-          loginMsg.textContent = '✓ ' + data.mensaje + ' Redirigiendo...';
-          loginMsg.className = 'msg success';
-          setTimeout(() => {
-            window.location.href = data.redirect;
-          }, 1500);
-        } else {
-          loginMsg.textContent = '✗ ' + (data.error || 'Error al iniciar sesión');
+          if (data.success) {
+            loginMsg.textContent = '✓ ' + data.mensaje + ' Redirigiendo...';
+            loginMsg.className = 'msg success';
+            setTimeout(() => {
+              window.location.href = data.redirect;
+            }, 1500);
+          } else {
+            loginMsg.textContent = '✗ ' + (data.error || 'Error al iniciar sesión');
+            loginMsg.className = 'msg error';
+          }
+        } catch(parseErr) {
+          console.log('[v0] JSON parse error:', parseErr); // Log parse error
+          loginMsg.textContent = '✗ Error del servidor (respuesta inválida)';
           loginMsg.className = 'msg error';
         }
       })
       .catch(err => {
+        console.log('[v0] Fetch error:', err); // Log fetch error
         loginMsg.textContent = '✗ Error de conexión con el servidor';
         loginMsg.className = 'msg error';
       });
